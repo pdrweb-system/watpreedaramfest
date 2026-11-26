@@ -35,6 +35,7 @@ const HEADERS = [
   'ชื่อผู้อำนวยการโรงเรียน',
   'ระดับชั้น',
   'ชื่อชุดการแสดง',
+  'ชื่อนักแสดง',
   'ชื่อครูผู้ฝึกซ้อม',
   'ลิงก์เพลง',
   'ไฟล์แนบ'
@@ -89,16 +90,20 @@ function submitForm(form) {
   lock.waitLock(30000);
   try {
     const sheet = getSheet_();
-    sheet.appendRow([
-      new Date(),
-      safe_(data.school),
-      safe_(data.director),
-      safe_(data.level),
-      safe_(data.showName),
-      safe_(data.trainer),
-      safe_(data.musicLink),
-      fileLinks.join('\n')
-    ]);
+    const values = {
+      'วันเวลาที่ส่ง': new Date(),
+      'ชื่อโรงเรียน': safe_(data.school),
+      'ชื่อผู้อำนวยการโรงเรียน': safe_(data.director),
+      'ระดับชั้น': safe_(data.level),
+      'ชื่อชุดการแสดง': safe_(data.showName),
+      'ชื่อนักแสดง': safe_(data.performers),
+      'ชื่อครูผู้ฝึกซ้อม': safe_(data.trainer),
+      'ลิงก์เพลง': safe_(data.musicLink),
+      'ไฟล์แนบ': fileLinks.join('\n')
+    };
+    // เขียนตามชื่อหัวคอลัมน์ จึงไม่พังแม้ลำดับคอลัมน์ในชีตจะต่างไป
+    const header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    sheet.appendRow(header.map(function (h) { return h in values ? values[h] : ''; }));
   } finally {
     lock.releaseLock();
   }
@@ -203,18 +208,19 @@ function cleanFileName_(n) {
 
 function validate_(form) {
   if (!form) throw new Error('ไม่พบข้อมูลแบบฟอร์ม');
-  const clean = function (v) { return String(v == null ? '' : v).trim().substring(0, 1000); };
+  const clean = function (v, max) { return String(v == null ? '' : v).trim().substring(0, max || 1000); };
   const d = {
     school: clean(form.school),
     director: clean(form.director),
     level: clean(form.level),
     showName: clean(form.showName),
+    performers: clean(form.performers, 5000),
     trainer: clean(form.trainer),
     musicLink: clean(form.musicLink)
   };
   const labels = {
     school: 'ชื่อโรงเรียน', director: 'ชื่อผู้อำนวยการโรงเรียน', level: 'ระดับชั้น',
-    showName: 'ชื่อชุดการแสดง', trainer: 'ชื่อครูผู้ฝึกซ้อม', musicLink: 'ลิงก์เพลง'
+    showName: 'ชื่อชุดการแสดง', performers: 'ชื่อนักแสดง', trainer: 'ชื่อครูผู้ฝึกซ้อม', musicLink: 'ลิงก์เพลง'
   };
   Object.keys(labels).forEach(function (k) {
     if (!d[k]) throw new Error('กรุณากรอก ' + labels[k]);
@@ -245,7 +251,22 @@ function getSheet_() {
     sheet.getRange('A:A').setNumberFormat('dd/MM/yyyy HH:mm:ss');
     sheet.setColumnWidths(1, HEADERS.length, 200);
   }
+  ensureHeaders_(sheet);
   return sheet;
+}
+
+/** เพิ่มคอลัมน์ที่ยังไม่มีในชีตเดิม (เช่น 'ชื่อนักแสดง') โดยแทรกไว้ต่อจากคอลัมน์ก่อนหน้าใน HEADERS */
+function ensureHeaders_(sheet) {
+  for (let i = 0; i < HEADERS.length; i++) {
+    const header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    if (header.indexOf(HEADERS[i]) !== -1) continue;
+    const prev = i > 0 ? header.indexOf(HEADERS[i - 1]) : -1;
+    const col = prev === -1 ? header.length + 1 : prev + 2;
+    if (col <= header.length) sheet.insertColumnBefore(col);
+    sheet.getRange(1, col).setValue(HEADERS[i])
+      .setFontWeight('bold').setBackground('#7a1f1f').setFontColor('#ffffff');
+    sheet.setColumnWidth(col, 200);
+  }
 }
 
 function getFolder_() {

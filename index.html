@@ -42,12 +42,13 @@
     .req { color: var(--err); }
     .opt { color: var(--muted); font-weight: 400; font-size: 14px; }
     .hint { color: var(--muted); font-size: 14px; margin: -4px 0 8px; }
-    input[type=text], input[type=url] {
+    input[type=text], input[type=url], textarea {
       width: 100%; padding: 10px 12px; font: inherit; color: inherit;
       border: 1px solid var(--line); border-radius: 8px; background: #fff;
     }
-    input:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
-    .invalid input { border-color: var(--err); }
+    input:focus, textarea:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
+    textarea { resize: vertical; min-height: 96px; }
+    .invalid input, .invalid textarea { border-color: var(--err); }
     .msg { color: var(--err); font-size: 14px; margin-top: 6px; display: none; }
     .invalid .msg { display: block; }
     .drop {
@@ -120,22 +121,29 @@
       <div class="msg">กรุณากรอกชื่อชุดการแสดง</div>
     </div>
 
+    <div class="card" data-field="performers">
+      <label class="q" for="performers"><span class="num">5.</span>ชื่อนักแสดง <span class="req">*</span></label>
+      <p class="hint">หากมีหลายคน ให้พิมพ์ 1 ชื่อต่อ 1 บรรทัด หรือคั่นด้วยเครื่องหมายจุลภาค ( , )</p>
+      <textarea id="performers" name="performers" rows="4" required maxlength="5000"></textarea>
+      <div class="msg">กรุณากรอกชื่อนักแสดง</div>
+    </div>
+
     <div class="card" data-field="trainer">
-      <label class="q" for="trainer"><span class="num">5.</span>ชื่อครูผู้ฝึกซ้อม <span class="req">*</span></label>
+      <label class="q" for="trainer"><span class="num">6.</span>ชื่อครูผู้ฝึกซ้อม <span class="req">*</span></label>
       <p class="hint">หากมีหลายท่าน ให้คั่นด้วยเครื่องหมายจุลภาค ( , )</p>
       <input type="text" id="trainer" name="trainer" required maxlength="500">
       <div class="msg">กรุณากรอกชื่อครูผู้ฝึกซ้อม</div>
     </div>
 
     <div class="card" data-field="musicLink">
-      <label class="q" for="musicLink"><span class="num">6.</span>ลิงก์เพลง <span class="req">*</span></label>
+      <label class="q" for="musicLink"><span class="num">7.</span>ลิงก์เพลง <span class="req">*</span></label>
       <p class="hint">เช่น ลิงก์ YouTube หรือลิงก์ Google Drive </p>
       <input type="text" id="musicLink" name="musicLink" required maxlength="1000">
       <div class="msg">กรุณากรอกลิงก์เพลง</div>
     </div>
 
     <div class="card" data-field="files">
-      <label class="q"><span class="num">7.</span>อัปโหลดไฟล์ <span class="opt">(ไม่บังคับ)</span></label>
+      <label class="q"><span class="num">8.</span>อัปโหลดไฟล์ <span class="opt">(ไม่บังคับ)</span></label>
       <p class="hint">เช่น ไฟล์เพลง ได้สูงสุด <span id="maxFilesText">5</span> ไฟล์ ไฟล์ละไม่เกิน <span id="maxFileMbText">100</span> MB</p>
       <div class="drop" id="drop" tabindex="0" role="button">
         <strong>คลิกเพื่อเลือกไฟล์</strong> หรือลากไฟล์มาวางที่นี่
@@ -267,6 +275,7 @@
       director: () => form.director.value.trim() !== '',
       level: () => form.level.value.trim() !== '',
       showName: () => form.showName.value.trim() !== '',
+      performers: () => form.performers.value.trim() !== '',
       trainer: () => form.trainer.value.trim() !== '',
       musicLink: () => form.musicLink.value.trim() !== ''
     };
@@ -278,7 +287,7 @@
     }
     if (firstBad) {
       firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      const el = firstBad.querySelector('input');
+      const el = firstBad.querySelector('input, textarea');
       if (el) el.focus({ preventScroll: true });
     }
     return !firstBad;
@@ -317,6 +326,7 @@
         director: form.director.value.trim(),
         level: form.level.value.trim(),
         showName: form.showName.value.trim(),
+        performers: form.performers.value.trim(),
         trainer: form.trainer.value.trim(),
         musicLink: form.musicLink.value.trim(),
         website: form.website.value,
