@@ -47,8 +47,24 @@
       border: 1px solid var(--line); border-radius: 8px; background: #fff;
     }
     input:focus, textarea:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
-    textarea { resize: vertical; min-height: 96px; }
     .invalid input, .invalid textarea { border-color: var(--err); }
+    .name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .name-row .idx { flex: none; width: 1.8em; text-align: right; color: var(--muted); font-size: 14px; }
+    .name-row input { flex: 1; min-width: 0; }
+    .name-row .remove-name {
+      flex: none; border: 1px solid var(--line); background: #fff; color: var(--err);
+      border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; cursor: pointer;
+    }
+    .name-row .remove-name:hover { border-color: var(--err); background: #fdecea; }
+    .name-row .remove-name[hidden] { display: none; }
+    .add-name {
+      border: 1px dashed var(--gold); background: var(--gold-soft); color: var(--maroon);
+      border-radius: 8px; padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer;
+    }
+    .add-name:hover { border-style: solid; }
+    .add-name:disabled { opacity: .5; cursor: not-allowed; }
+    .invalid .name-row input { border-color: var(--line); }
+    .invalid .name-row input.empty { border-color: var(--err); }
     .msg { color: var(--err); font-size: 14px; margin-top: 6px; display: none; }
     .invalid .msg { display: block; }
     .drop {
@@ -122,17 +138,19 @@
     </div>
 
     <div class="card" data-field="performers">
-      <label class="q" for="performers"><span class="num">5.</span>ชื่อนักแสดง <span class="req">*</span></label>
-      <p class="hint">หากมีหลายคน ให้พิมพ์ 1 ชื่อต่อ 1 บรรทัด หรือคั่นด้วยเครื่องหมายจุลภาค ( , )</p>
-      <textarea id="performers" name="performers" rows="4" required maxlength="5000"></textarea>
-      <div class="msg">กรุณากรอกชื่อนักแสดง</div>
+      <label class="q"><span class="num">5.</span>ชื่อนักแสดง <span class="req">*</span></label>
+      <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
+      <div class="names" id="performersList" data-label="นักแสดง" data-max="100"></div>
+      <button type="button" class="add-name" data-list="performersList">＋ เพิ่มชื่อ</button>
+      <div class="msg">กรุณากรอกชื่อนักแสดงอย่างน้อย 1 ชื่อ</div>
     </div>
 
     <div class="card" data-field="trainer">
-      <label class="q" for="trainer"><span class="num">6.</span>ชื่อครูผู้ฝึกซ้อม <span class="req">*</span></label>
-      <p class="hint">หากมีหลายท่าน ให้คั่นด้วยเครื่องหมายจุลภาค ( , )</p>
-      <input type="text" id="trainer" name="trainer" required maxlength="500">
-      <div class="msg">กรุณากรอกชื่อครูผู้ฝึกซ้อม</div>
+      <label class="q"><span class="num">6.</span>ชื่อครูผู้ฝึกซ้อม <span class="req">*</span></label>
+      <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
+      <div class="names" id="trainerList" data-label="ครูผู้ฝึกซ้อม" data-max="20"></div>
+      <button type="button" class="add-name" data-list="trainerList">＋ เพิ่มชื่อ</button>
+      <div class="msg">กรุณากรอกชื่อครูผู้ฝึกซ้อมอย่างน้อย 1 ชื่อ</div>
     </div>
 
     <div class="card" data-field="musicLink">
@@ -267,6 +285,54 @@
     return init.uploadId;
   }
 
+  // ---------- รายชื่อ (1 ช่องต่อ 1 ชื่อ) ----------
+  function renumber(list) {
+    const rows = list.querySelectorAll('.name-row');
+    rows.forEach((row, i) => {
+      row.querySelector('.idx').textContent = (i + 1) + '.';
+      row.querySelector('input').setAttribute('aria-label', list.dataset.label + ' คนที่ ' + (i + 1));
+      row.querySelector('.remove-name').hidden = rows.length === 1;
+    });
+    const addBtn = form.querySelector('.add-name[data-list="' + list.id + '"]');
+    addBtn.disabled = rows.length >= Number(list.dataset.max);
+  }
+  function addNameRow(list, focus) {
+    if (list.children.length >= Number(list.dataset.max)) return;
+    const row = document.createElement('div');
+    row.className = 'name-row';
+    const idx = document.createElement('span');
+    idx.className = 'idx';
+    const input = document.createElement('input');
+    input.type = 'text'; input.maxLength = 200;
+    input.placeholder = 'ชื่อ' + list.dataset.label;
+    input.addEventListener('keydown', e => {
+      // กด Enter ในช่องสุดท้ายเพื่อเพิ่มช่องใหม่ แทนการส่งฟอร์ม
+      if (e.key === 'Enter') { e.preventDefault(); if (input.value.trim()) addNameRow(list, true); }
+    });
+    const rm = document.createElement('button');
+    rm.type = 'button'; rm.className = 'remove-name'; rm.textContent = 'ลบชื่อ';
+    rm.onclick = () => {
+      const next = row.nextElementSibling || row.previousElementSibling;
+      row.remove(); renumber(list);
+      if (next) next.querySelector('input').focus();
+    };
+    row.append(idx, input, rm);
+    list.append(row);
+    renumber(list);
+    if (focus) input.focus();
+  }
+  function getNames(id) {
+    return [...document.getElementById(id).querySelectorAll('input')]
+      .map(i => i.value.trim()).filter(Boolean);
+  }
+  function initNameLists() {
+    form.querySelectorAll('.names').forEach(list => { list.innerHTML = ''; addNameRow(list, false); });
+  }
+  form.querySelectorAll('.add-name').forEach(btn => {
+    btn.addEventListener('click', () => addNameRow(document.getElementById(btn.dataset.list), true));
+  });
+  initNameLists();
+
   // ---------- validation ----------
   function validate() {
     let firstBad = null;
@@ -275,19 +341,20 @@
       director: () => form.director.value.trim() !== '',
       level: () => form.level.value.trim() !== '',
       showName: () => form.showName.value.trim() !== '',
-      performers: () => form.performers.value.trim() !== '',
-      trainer: () => form.trainer.value.trim() !== '',
+      performers: () => getNames('performersList').length > 0,
+      trainer: () => getNames('trainerList').length > 0,
       musicLink: () => form.musicLink.value.trim() !== ''
     };
     for (const k in checks) {
       const card = form.querySelector('[data-field="' + k + '"]');
       const ok = checks[k]();
       card.classList.toggle('invalid', !ok);
+      card.querySelectorAll('.name-row input').forEach(i => i.classList.toggle('empty', !ok && !i.value.trim()));
       if (!ok && !firstBad) firstBad = card;
     }
     if (firstBad) {
       firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      const el = firstBad.querySelector('input, textarea');
+      const el = firstBad.querySelector('input.empty') || firstBad.querySelector('input, textarea');
       if (el) el.focus({ preventScroll: true });
     }
     return !firstBad;
@@ -326,8 +393,8 @@
         director: form.director.value.trim(),
         level: form.level.value.trim(),
         showName: form.showName.value.trim(),
-        performers: form.performers.value.trim(),
-        trainer: form.trainer.value.trim(),
+        performers: getNames('performersList').join('\n'),
+        trainer: getNames('trainerList').join('\n'),
         musicLink: form.musicLink.value.trim(),
         website: form.website.value,
         uploadIds
@@ -348,6 +415,7 @@
 
   function resetForm() {
     form.reset(); files = []; renderFiles(); showFileError('');
+    initNameLists();
     form.querySelectorAll('.invalid').forEach(c => c.classList.remove('invalid'));
     statusEl.textContent = ''; submitBtn.disabled = false;
   }
