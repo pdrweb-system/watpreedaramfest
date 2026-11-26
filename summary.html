@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#065f46">
+  <meta name="color-scheme" content="light">
+  <title>ข้อมูลโรงเรียนที่ส่งการแสดงแล้ว · งานปิดทองหลวงพ่อนิล 2570</title>
+  <meta name="description" content="รายชื่อโรงเรียนและชุดการแสดงที่ส่งเข้าร่วมงานนมัสการปิดทองหลวงพ่อนิล วัดปรีดาราม (ยายส้ม) ประจำปี 2570">
+  <meta property="og:image" content="https://pdrweb-system.github.io/watpreedaramfest/assets/cover-1600.webp">
+  <script src="config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* ส่วนหัวของหน้าสรุปเตี้ยกว่าหน้าหลัก */
+    .hero.hero-compact { min-height: max(300px, min(calc(28vw + 120px), 440px)); }
+    .hero.hero-compact::after {
+      background: linear-gradient(180deg, rgba(3, 46, 34, .92) 0%, rgba(3, 46, 34, .78) 45%, rgba(3, 46, 34, .55) 100%);
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px 0 10px;
+      border-radius: 999px; color: #fff; text-decoration: none; font-weight: 600; text-shadow: none;
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.4); margin-bottom: 14px;
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    }
+    .back-link:hover { background: rgba(255,255,255,.26); }
+    .back-link:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+    .wrap.wide { max-width: 880px; }
+    .nowrap { display: inline-block; }
+
+    /* ตัวเลขสรุป */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    .stat {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 16px; text-align: center;
+    }
+    .stat .value {
+      font-family: 'Prompt', 'Sarabun', sans-serif; font-weight: 600; font-size: 30px; line-height: 1.2;
+      color: var(--primary-strong); font-variant-numeric: tabular-nums;
+    }
+    .stat .label { color: var(--text-muted); font-size: 14px; }
+
+    /* แถบค้นหา */
+    .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .search { position: relative; flex: 1 1 260px; }
+    .search .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .search input { padding-left: 44px; }
+    .refresh { flex: none; }
+    .refresh .icon { transition: transform 600ms var(--ease); }
+    .refresh.spinning .icon { animation: spin .8s linear infinite; }
+    .meta { margin: 10px 0 0; font-size: 13px; color: var(--text-muted); }
+
+    /* รายการโรงเรียน */
+    .school {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow); padding: 20px; margin-bottom: 12px;
+    }
+    .school-head { display: flex; align-items: flex-start; gap: 12px; }
+    .school-head .badge {
+      width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center;
+      background: var(--primary-soft); color: var(--primary); border: 1px solid var(--primary-tint);
+    }
+    .school-head h2 {
+      font-family: 'Prompt', 'Sarabun', sans-serif; font-weight: 600; font-size: 18px; line-height: 1.4;
+      margin: 0; color: var(--text); overflow-wrap: anywhere;
+    }
+    .school-head .count { margin: 0; color: var(--text-muted); font-size: 14px; }
+    .shows { list-style: none; margin: 14px 0 0; padding: 0; }
+    .shows li {
+      display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center;
+      padding: 12px 0; border-top: 1px solid var(--border);
+    }
+    .shows .show-name { font-weight: 600; overflow-wrap: anywhere; }
+    .shows .show-meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; color: var(--text-muted); }
+    .shows .show-meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .shows .show-meta .icon { width: 16px; height: 16px; }
+    .tag {
+      display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600;
+      background: var(--primary-soft); color: var(--primary-strong); border: 1px solid var(--primary-tint); white-space: nowrap;
+    }
+    mark { background: #fef08a; color: inherit; border-radius: 3px; padding: 0 1px; }
+
+    /* สถานะ */
+    .state { text-align: center; padding: 36px 20px; color: var(--text-muted); }
+    .state .state-icon {
+      width: 56px; height: 56px; margin: 0 auto 12px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--primary-soft); color: var(--primary);
+    }
+    .state.error .state-icon { background: var(--danger-soft); color: var(--danger); }
+    .state h2 { font-family: 'Prompt', 'Sarabun', sans-serif; font-size: 19px; color: var(--text); margin: 0 0 6px; }
+    .state p { margin: 0 0 16px; }
+    .skeleton { height: 112px; border-radius: var(--radius-lg); margin-bottom: 12px;
+      background: linear-gradient(90deg, #e7f1ec 25%, #f4f9f6 50%, #e7f1ec 75%); background-size: 200% 100%;
+      animation: shimmer 1.2s linear infinite; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    @media (max-width: 480px) {
+      .stats { gap: 8px; }
+      .stat { padding: 12px 6px; }
+      .stat .value { font-size: 24px; }
+      .stat .label { font-size: 13px; }
+      .school { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip" href="#list">ข้ามไปยังรายการ</a>
+
+<header class="hero hero-compact">
+  <picture class="cover">
+    <img src="assets/cover-1600.webp"
+         srcset="assets/cover-800.webp 800w, assets/cover-1600.webp 1600w"
+         sizes="(max-width: 925px) 925px, 100vw"
+         width="1600" height="900" alt="">
+  </picture>
+  <div class="hero-content">
+    <a class="back-link" href="./">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>กลับไปหน้าแบบสำรวจ
+    </a>
+    <br>
+    <span class="chip">ประจำปี 2570</span>
+    <h1>ข้อมูลโรงเรียนที่ส่งการแสดงแล้ว<span class="temple"><span class="nowrap">งานนมัสการปิดทองหลวงพ่อนิล</span> <span class="nowrap">วัดปรีดาราม (ยายส้ม)</span></span></h1>
+  </div>
+</header>
+
+<main class="wrap wide">
+  <div class="notice" id="configNotice" role="alert">ระบบยังไม่ได้ตั้งค่าปลายทางสำหรับดึงข้อมูล (SCRIPT_URL ในไฟล์ config.js) กรุณาติดต่อผู้ดูแลระบบ</div>
+
+  <section class="stats" aria-label="สรุปจำนวน">
+    <div class="stat"><div class="value" id="statSchools">–</div><div class="label">โรงเรียน</div></div>
+    <div class="stat"><div class="value" id="statShows">–</div><div class="label">ชุดการแสดง</div></div>
+    <div class="stat"><div class="value" id="statPerformers">–</div><div class="label">นักแสดง</div></div>
+  </section>
+
+  <div class="card">
+    <div class="toolbar">
+      <div class="search">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <label for="q" class="hp">ค้นหา</label>
+        <input type="text" id="q" placeholder="ค้นหาโรงเรียน หรือชุดการแสดง" aria-label="ค้นหาชื่อโรงเรียน ชุดการแสดง หรือระดับชั้น" autocomplete="off">
+      </div>
+      <button type="button" class="btn-secondary refresh" id="refreshBtn">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>รีเฟรช
+      </button>
+    </div>
+    <p class="meta" id="meta" role="status" aria-live="polite">กำลังโหลดข้อมูล…</p>
+  </div>
+
+  <div id="list" tabindex="-1">
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+  </div>
+</main>
+
+<footer>งานนมัสการปิดทองหลวงพ่อนิล · วัดปรีดาราม (ยายส้ม) · 2570</footer>
+
+<script>
+  const CFG = window.SURVEY_CONFIG || {};
+  const SCRIPT_URL = (CFG.SCRIPT_URL || '').trim();
+  const listEl = document.getElementById('list');
+  const metaEl = document.getElementById('meta');
+  const qEl = document.getElementById('q');
+  const refreshBtn = document.getElementById('refreshBtn');
+  let items = [];
+  let updatedText = '';
+
+  const ICON = {
+    school: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg>',
+    people: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14a6.5 6.5 0 0 1 3.5 6"/></svg>',
+    clock: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    empty: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M3 7l3-4h12l3 4"/><path d="M9 12h6"/></svg>',
+    alert: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
+  };
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  // ไฮไลต์คำค้นหา (ทำหลัง escape เพื่อความปลอดภัย)
+  function hl(text, q) {
+    const t = esc(text);
+    if (!q) return t;
+    const i = String(text).toLowerCase().indexOf(q);
+    if (i < 0) return t;
+    return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' + esc(text.slice(i + q.length));
+  }
+  function fmtDate(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return '';
+    return d.toLocaleString('th-TH', { day: 'numeric', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit' }) + ' น.';
+  }
+  const num = n => n.toLocaleString('th-TH');
+
+  function render() {
+    const q = qEl.value.trim().toLowerCase();
+    const filtered = items.filter(it => !q || [it.school, it.showName, it.level].some(v => String(v).toLowerCase().includes(q)));
+
+    // ตัวเลขสรุปคิดจากข้อมูลทั้งหมด ไม่ขึ้นกับคำค้น
+    const schools = new Set(items.map(it => it.school.trim()));
+    document.getElementById('statSchools').textContent = num(schools.size);
+    document.getElementById('statShows').textContent = num(items.length);
+    document.getElementById('statPerformers').textContent = num(items.reduce((s, it) => s + (Number(it.performers) || 0), 0));
+
+    if (!items.length) {
+      metaEl.textContent = updatedText;
+      listEl.innerHTML = '<div class="card state"><div class="state-icon">' + ICON.empty + '</div><h2>ยังไม่มีโรงเรียนส่งการแสดง</h2><p>เมื่อมีโรงเรียนส่งแบบสำรวจ รายชื่อจะแสดงที่นี่</p><a class="btn-secondary" href="./">ไปหน้าแบบสำรวจ</a></div>';
+      return;
+    }
+    if (!filtered.length) {
+      metaEl.textContent = 'ไม่พบข้อมูลที่ค้นหา';
+      listEl.innerHTML = '<div class="card state"><div class="state-icon">' + ICON.empty + '</div><h2>ไม่พบข้อมูลที่ค้นหา</h2><p>ลองค้นหาด้วยคำอื่น หรือล้างคำค้นหา</p><button type="button" class="btn-secondary" id="clearQ">ล้างคำค้นหา</button></div>';
+      document.getElementById('clearQ').onclick = () => { qEl.value = ''; render(); qEl.focus(); };
+      return;
+    }
+
+    // จัดกลุ่มตามโรงเรียน เรียงชื่อตามพจนานุกรมไทย
+    const groups = new Map();
+    filtered.forEach(it => {
+      const key = it.school.trim();
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(it);
+    });
+    const names = [...groups.keys()].sort((a, b) => a.localeCompare(b, 'th'));
+    listEl.innerHTML = names.map(name => {
+      const shows = groups.get(name).sort((a, b) => String(a.time).localeCompare(String(b.time)));
+      return '<article class="school">' +
+        '<div class="school-head"><div class="badge">' + ICON.school + '</div><div>' +
+        '<h2>' + hl(name, q) + '</h2><p class="count">' + num(shows.length) + ' ชุดการแสดง</p></div></div>' +
+        '<ul class="shows">' + shows.map(s =>
+          '<li><span class="show-name">' + hl(s.showName || '-', q) + '</span>' +
+          (s.level ? '<span class="tag">' + hl(s.level, q) + '</span>' : '<span></span>') +
+          '<span class="show-meta"><span>' + ICON.people + 'นักแสดง ' + num(Number(s.performers) || 0) + ' คน</span>' +
+          (fmtDate(s.time) ? '<span>' + ICON.clock + 'ส่งเมื่อ ' + fmtDate(s.time) + '</span>' : '') +
+          '</span></li>').join('') +
+        '</ul></article>';
+    }).join('');
+    metaEl.textContent = q ? 'พบ ' + num(filtered.length) + ' ชุดการแสดง จาก ' + num(groups.size) + ' โรงเรียน' : updatedText;
+  }
+
+  function showError(msg) {
+    listEl.innerHTML = '<div class="card state error" role="alert"><div class="state-icon">' + ICON.alert + '</div><h2>โหลดข้อมูลไม่สำเร็จ</h2><p>' + esc(msg) + '</p><button type="button" class="btn-secondary" id="retryBtn">ลองใหม่</button></div>';
+    document.getElementById('retryBtn').onclick = load;
+    metaEl.textContent = '';
+  }
+
+  async function load() {
+    if (!SCRIPT_URL) {
+      document.getElementById('configNotice').style.display = 'flex';
+      showError('ยังไม่ได้ตั้งค่า SCRIPT_URL');
+      return;
+    }
+    refreshBtn.disabled = true; refreshBtn.classList.add('spinning');
+    metaEl.textContent = 'กำลังโหลดข้อมูล…';
+    try {
+      const url = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 'action=list&t=' + Date.now();
+      const res = await fetch(url, { redirect: 'follow' });
+      let data;
+      try { data = await res.json(); } catch (_) { throw new Error('เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง (HTTP ' + res.status + ')'); }
+      if (!data.ok) throw new Error(data.error || 'ไม่ทราบสาเหตุ');
+      if (!Array.isArray(data.items)) throw new Error('Apps Script ยังเป็นเวอร์ชันเก่า กรุณาอัปเดตโค้ดและ deploy เวอร์ชันใหม่');
+      items = data.items;
+      updatedText = 'อัปเดตล่าสุด ' + fmtDate(data.updated || new Date().toISOString());
+      render();
+    } catch (err) {
+      showError(err.message === 'Failed to fetch' ? 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่' : err.message);
+    } finally {
+      refreshBtn.disabled = false; refreshBtn.classList.remove('spinning');
+    }
+  }
+
+  let t;
+  qEl.addEventListener('input', () => { clearTimeout(t); t = setTimeout(render, 150); });
+  refreshBtn.addEventListener('click', load);
+  load();
+</script>
+</body>
+</html>

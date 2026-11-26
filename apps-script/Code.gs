@@ -48,8 +48,55 @@ const HEADERS = [
 // ==================================================
 
 /** ตรวจสอบว่า API ทำงานอยู่ (เปิด URL /exec ในเบราว์เซอร์ได้) */
-function doGet() {
+function doGet(e) {
+  const action = e && e.parameter && e.parameter.action;
+  if (action === 'list') {
+    try {
+      return json_(listSubmissions_());
+    } catch (err) {
+      return json_({ ok: false, error: err && err.message ? err.message : String(err) });
+    }
+  }
   return json_({ ok: true, service: 'watpreedaramfest-survey' });
+}
+
+/**
+ * ข้อมูลสรุปสำหรับหน้า summary.html (เปิดดูได้ทุกคน)
+ * ส่งเฉพาะ วันเวลา ชื่อโรงเรียน ระดับชั้น ชื่อชุดการแสดง และ "จำนวน" นักแสดง
+ * ไม่ส่งชื่อนักเรียน ชื่อครู/ผู้อำนวยการ ลิงก์เพลง หรือไฟล์แนบ เพื่อคุ้มครองข้อมูลส่วนบุคคล
+ */
+function listSubmissions_() {
+  const cache = CacheService.getScriptCache();
+  const cached = cache.get('summary_v1');
+  if (cached) return JSON.parse(cached);
+
+  const sheet = getSheet_();
+  const lastRow = sheet.getLastRow();
+  const items = [];
+  if (lastRow > 1) {
+    const values = sheet.getRange(1, 1, lastRow, sheet.getLastColumn()).getValues();
+    const col = {};
+    values[0].forEach(function (h, i) { col[h] = i; });
+    const get = function (row, name) { return name in col ? row[col[name]] : ''; };
+    for (let r = 1; r < values.length; r++) {
+      const row = values[r];
+      const school = String(get(row, 'ชื่อโรงเรียน') || '').replace(/^'/, '').trim();
+      if (!school) continue;
+      const time = get(row, 'วันเวลาที่ส่ง');
+      const performers = String(get(row, 'ชื่อนักแสดง') || '').split(/\n|,/)
+        .map(function (x) { return x.trim(); }).filter(String).length;
+      items.push({
+        time: Object.prototype.toString.call(time) === '[object Date]' ? time.toISOString() : String(time || ''),
+        school: school,
+        level: String(get(row, 'ระดับชั้น') || '').replace(/^'/, '').trim(),
+        showName: String(get(row, 'ชื่อชุดการแสดง') || '').replace(/^'/, '').trim(),
+        performers: performers
+      });
+    }
+  }
+  const result = { ok: true, items: items, updated: new Date().toISOString() };
+  try { cache.put('summary_v1', JSON.stringify(result), 60); } catch (e) { /* ข้อมูลใหญ่เกิน cache */ }
+  return result;
 }
 
 /**
@@ -114,6 +161,7 @@ function submitForm(form) {
   }
 
   ids.forEach(function (id) { CacheService.getScriptCache().remove('up_' + id); });
+  CacheService.getScriptCache().remove('summary_v1');
   return { ok: true, files: fileLinks.length };
 }
 
