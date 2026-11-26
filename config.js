@@ -5,6 +5,6 @@ window.SURVEY_CONFIG = {
 
   // ต้องตรงกับค่าใน apps-script/Code.gs
   MAX_FILES: 5,
-  MAX_FILE_MB: 10,
-  MAX_TOTAL_MB: 25
+  MAX_FILE_MB: 100,
+  MAX_TOTAL_MB: 500
 };
