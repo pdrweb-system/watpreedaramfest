@@ -130,8 +130,8 @@
     <div class="card" data-field="musicLink">
       <label class="q" for="musicLink"><span class="num">6.</span>ลิงก์เพลง <span class="req">*</span></label>
       <p class="hint">เช่น ลิงก์ YouTube หรือลิงก์ Google Drive </p>
-      <input type="url" id="musicLink" name="musicLink" required placeholder="https://" maxlength="1000">
-      <div class="msg">กรุณาใส่ลิงก์ที่ขึ้นต้นด้วย http:// หรือ https://</div>
+      <input type="text" id="musicLink" name="musicLink" required maxlength="1000">
+      <div class="msg">กรุณากรอกลิงก์เพลง</div>
     </div>
 
     <div class="card" data-field="files">
@@ -268,7 +268,7 @@
       level: () => form.level.value.trim() !== '',
       showName: () => form.showName.value.trim() !== '',
       trainer: () => form.trainer.value.trim() !== '',
-      musicLink: () => /^https?:\/\/\S+$/i.test(form.musicLink.value.trim())
+      musicLink: () => form.musicLink.value.trim() !== ''
     };
     for (const k in checks) {
       const card = form.querySelector('[data-field="' + k + '"]');

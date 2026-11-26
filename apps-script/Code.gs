@@ -219,10 +219,6 @@ function validate_(form) {
   Object.keys(labels).forEach(function (k) {
     if (!d[k]) throw new Error('กรุณากรอก ' + labels[k]);
   });
-  if (!/^https?:\/\/\S+$/i.test(d.musicLink)) {
-    throw new Error('ลิงก์เพลงต้องขึ้นต้นด้วย http:// หรือ https://');
-  }
-
   return d;
 }
 
