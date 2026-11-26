@@ -5,6 +5,8 @@
 - Pushing to `main` deploys to GitHub Pages automatically (`.github/workflows/pages.yml`).
 
 ## Project layout
+- `summary.html`: public summary of submissions (school, level, show name, performer count only, no personal names). It GETs `SCRIPT_URL?action=list` (`listSubmissions_` in Code.gs, cached 60s).
+- Shared styles live in `assets/style.css` (used by both pages); page-specific CSS stays inline.
 - `index.html` + `config.js`: the survey page hosted on GitHub Pages. It sends data with `fetch` POST (`text/plain` JSON) to `SCRIPT_URL` in `config.js`.
 - `apps-script/Code.gs`: the Google Apps Script API (`doPost`). It saves rows to Google Sheets and uploaded files to Google Drive. Changes here must be pasted into the Apps Script editor by hand and deployed as a new version.
 - File limits (`MAX_FILES`, `MAX_FILE_MB`, `MAX_TOTAL_MB`) must match in `config.js` and `apps-script/Code.gs`.
