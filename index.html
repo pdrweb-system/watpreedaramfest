@@ -9,7 +9,7 @@
   <meta name="description" content="แบบสำรวจการแสดงของนักเรียน งานนมัสการปิดทองหลวงพ่อนิล วัดปรีดาราม (ยายส้ม) ประจำปี 2570">
   <meta property="og:title" content="แบบสำรวจการแสดงของนักเรียน งานปิดทองหลวงพ่อนิล 2570">
   <meta property="og:image" content="https://pdrweb-system.github.io/watpreedaramfest/assets/cover-1600.webp">
-  <link rel="preload" as="image" href="assets/cover-800.webp" imagesrcset="assets/cover-800.webp 800w, assets/cover-1600.webp 1600w" imagesizes="(max-width: 992px) 100vw, 960px">
+  <link rel="preload" as="image" href="assets/cover-800.webp" imagesrcset="assets/cover-800.webp 800w, assets/cover-1600.webp 1600w" imagesizes="(max-width: 925px) 925px, 100vw">
   <script src="config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,35 +57,48 @@
     .skip:focus { top: 12px; }
 
     /* ---------- ส่วนหัว ---------- */
+    /* ส่วนหัว: ภาพปกเต็มความกว้างจอ + ชื่องานซ้อนบนภาพ */
     .hero {
-      background:
-        radial-gradient(1200px 300px at 50% -80px, rgba(255,255,255,.14), transparent 70%),
-        linear-gradient(160deg, #047857 0%, #065f46 55%, #064e3b 100%);
+      position: relative; isolation: isolate; overflow: hidden;
+      min-height: max(460px, min(calc(56.25vw + 120px), 760px));
+      background: linear-gradient(160deg, #047857 0%, #065f46 55%, #064e3b 100%);
       color: var(--on-primary); text-align: center;
-      padding: 20px 16px 88px;
+      padding: 36px 16px 120px;
     }
-    /* ภาพปก: จองพื้นที่ 16:9 ไว้ก่อนโหลด เพื่อไม่ให้หน้ากระโดด */
-    .cover {
-      display: block; max-width: 960px; margin: 0 auto 20px; aspect-ratio: 16 / 9;
-      border-radius: var(--radius-lg); overflow: hidden; background: #0b5a45;
-      border: 3px solid rgba(255,255,255,.85); box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+    .cover { position: absolute; inset: 0; z-index: -2; display: block; }
+    .cover img {
+      display: block; width: 100%; height: 100%; object-fit: cover;
+      object-position: 36% 85%;   /* ให้เด็กสองคนอยู่ในภาพเสมอ */
     }
-    .cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    /* ไล่เงาเขียวเข้มด้านบนเพื่อให้ตัวอักษรอ่านชัด ส่วนล่างปล่อยให้เห็นภาพ */
+    .hero::after {
+      content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(3, 46, 34, .92) 0%, rgba(3, 46, 34, .78) 30%, rgba(3, 46, 34, .4) 48%, rgba(3, 46, 34, 0) 66%),
+        linear-gradient(0deg, rgba(3, 46, 34, .35) 0%, rgba(3, 46, 34, 0) 18%);
+    }
+    @media (max-width: 480px) {
+      .hero { padding-top: 28px; }
+      .hero h1 { font-size: 22px; }
+      .hero p { font-size: 15px; }
+    }
+    .hero-content { max-width: 720px; margin: 0 auto; text-shadow: 0 2px 12px rgba(0, 0, 0, .45); }
     .chip {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3);
+      background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.4);
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); text-shadow: none;
       border-radius: 999px; padding: 4px 14px; font-size: 14px; font-weight: 600;
     }
     .hero h1 {
       font-family: 'Prompt', 'Sarabun', sans-serif; font-weight: 600;
-      font-size: clamp(22px, 5.2vw, 30px); line-height: 1.45; margin: 14px auto 8px;
+      font-size: clamp(23px, 5.4vw, 38px); line-height: 1.4; margin: 14px auto 8px;
       max-width: 640px; text-wrap: balance;
     }
     .hero h1 .temple { display: block; font-weight: 500; font-size: .78em; opacity: .92; }
-    .hero p { margin: 0; color: rgba(255,255,255,.88); }
+    .hero p { margin: 0; color: rgba(255,255,255,.95); font-weight: 500; }
 
     /* ---------- เนื้อหา ---------- */
-    .wrap { max-width: 720px; margin: -56px auto 0; padding: 0 16px 48px; }
+    .wrap { position: relative; z-index: 1; max-width: 720px; margin: -56px auto 0; padding: 0 16px 48px; }
     .card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
       box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px;
@@ -270,13 +283,15 @@
   <picture class="cover">
     <img src="assets/cover-1600.webp"
          srcset="assets/cover-800.webp 800w, assets/cover-1600.webp 1600w"
-         sizes="(max-width: 992px) 100vw, 960px"
+         sizes="(max-width: 925px) 925px, 100vw"
          width="1600" height="900" fetchpriority="high"
          alt="ภาพการ์ตูนนักเรียนชายและหญิงเที่ยวงานวัด ถือสายไหมและป๊อปคอร์น มีโบสถ์ เจดีย์ทอง ชิงช้าสวรรค์ และซุ้มงานวัด">
   </picture>
-  <span class="chip">ประจำปี 2570</span>
-  <h1>แบบสำรวจการแสดงของนักเรียน งานนมัสการปิดทองหลวงพ่อนิล<span class="temple">วัดปรีดาราม (ยายส้ม)</span></h1>
-  <p>กรอกข้อมูลการแสดง 1 ชุดต่อการส่ง 1 ครั้ง</p>
+  <div class="hero-content">
+    <span class="chip">ประจำปี 2570</span>
+    <h1>แบบสำรวจการแสดงของนักเรียน งานนมัสการปิดทองหลวงพ่อนิล<span class="temple">วัดปรีดาราม (ยายส้ม)</span></h1>
+    <p>กรอกข้อมูลการแสดง 1 ชุดต่อการส่ง 1 ครั้ง</p>
+  </div>
 </header>
 
 <main class="wrap">
