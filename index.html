@@ -7,6 +7,9 @@
   <meta name="color-scheme" content="light">
   <title>แบบสำรวจการแสดงของนักเรียน งานปิดทองหลวงพ่อนิล 2570</title>
   <meta name="description" content="แบบสำรวจการแสดงของนักเรียน งานนมัสการปิดทองหลวงพ่อนิล วัดปรีดาราม (ยายส้ม) ประจำปี 2570">
+  <meta property="og:title" content="แบบสำรวจการแสดงของนักเรียน งานปิดทองหลวงพ่อนิล 2570">
+  <meta property="og:image" content="https://pdrweb-system.github.io/watpreedaramfest/assets/cover-1600.webp">
+  <link rel="preload" as="image" href="assets/cover-800.webp" imagesrcset="assets/cover-800.webp 800w, assets/cover-1600.webp 1600w" imagesizes="(max-width: 992px) 100vw, 960px">
   <script src="config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,14 +62,15 @@
         radial-gradient(1200px 300px at 50% -80px, rgba(255,255,255,.14), transparent 70%),
         linear-gradient(160deg, #047857 0%, #065f46 55%, #064e3b 100%);
       color: var(--on-primary); text-align: center;
-      padding: 40px 16px 88px;
+      padding: 20px 16px 88px;
     }
-    .hero .emblem {
-      width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 50%;
-      display: grid; place-items: center;
-      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28);
+    /* ภาพปก: จองพื้นที่ 16:9 ไว้ก่อนโหลด เพื่อไม่ให้หน้ากระโดด */
+    .cover {
+      display: block; max-width: 960px; margin: 0 auto 20px; aspect-ratio: 16 / 9;
+      border-radius: var(--radius-lg); overflow: hidden; background: #0b5a45;
+      border: 3px solid rgba(255,255,255,.85); box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
     }
-    .hero .emblem svg { width: 34px; height: 34px; }
+    .cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .chip {
       display: inline-flex; align-items: center; gap: 6px;
       background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3);
@@ -263,15 +267,13 @@
 <a class="skip" href="#form">ข้ามไปยังแบบฟอร์ม</a>
 
 <header class="hero">
-  <div class="emblem" aria-hidden="true">
-    <!-- ดอกบัว -->
-    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M24 38c-5-3-8-8-8-14 0-5 3-10 8-14 5 4 8 9 8 14 0 6-3 11-8 14Z"/>
-      <path d="M24 38c-7 0-14-4-16-12 4-1 8 0 11 2"/>
-      <path d="M24 38c7 0 14-4 16-12-4-1-8 0-11 2"/>
-      <path d="M12 41h24"/>
-    </svg>
-  </div>
+  <picture class="cover">
+    <img src="assets/cover-1600.webp"
+         srcset="assets/cover-800.webp 800w, assets/cover-1600.webp 1600w"
+         sizes="(max-width: 992px) 100vw, 960px"
+         width="1600" height="900" fetchpriority="high"
+         alt="ภาพการ์ตูนนักเรียนชายและหญิงเที่ยวงานวัด ถือสายไหมและป๊อปคอร์น มีโบสถ์ เจดีย์ทอง ชิงช้าสวรรค์ และซุ้มงานวัด">
+  </picture>
   <span class="chip">ประจำปี 2570</span>
   <h1>แบบสำรวจการแสดงของนักเรียน งานนมัสการปิดทองหลวงพ่อนิล<span class="temple">วัดปรีดาราม (ยายส้ม)</span></h1>
   <p>กรอกข้อมูลการแสดง 1 ชุดต่อการส่ง 1 ครั้ง</p>
