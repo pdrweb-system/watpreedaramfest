@@ -9,4 +9,4 @@
 - `apps-script/Code.gs`: the Google Apps Script API (`doPost`). It saves rows to Google Sheets and uploaded files to Google Drive. Changes here must be pasted into the Apps Script editor by hand and deployed as a new version.
 - File limits (`MAX_FILES`, `MAX_FILE_MB`, `MAX_TOTAL_MB`) must match in `config.js` and `apps-script/Code.gs`.
 - Uploads are chunked: the page calls `initUpload`, then `uploadChunk` (chunk size from the server, `CHUNK_MB`), then `submit` with `uploadIds`. Apps Script forwards each chunk to a Drive resumable upload session via `UrlFetchApp`.
-- UI text is in Thai.
+- UI text is in Thai. Theme is green/white: colours live as CSS tokens in `:root` of `index.html` (`--primary` #047857 etc.); keep text contrast ≥ 4.5:1, touch targets ≥ 44px, SVG icons (no emoji).

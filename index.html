@@ -3,190 +3,409 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#065f46">
+  <meta name="color-scheme" content="light">
   <title>แบบสำรวจการแสดงของนักเรียน งานปิดทองหลวงพ่อนิล 2570</title>
   <meta name="description" content="แบบสำรวจการแสดงของนักเรียน งานนมัสการปิดทองหลวงพ่อนิล วัดปรีดาราม (ยายส้ม) ประจำปี 2570">
   <script src="config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ---------- design tokens (ธีมเขียว-ขาว) ---------- */
     :root {
-      --maroon: #7a1f1f;
-      --gold: #c9a227;
-      --gold-soft: #fbf5e3;
-      --ink: #2b2420;
-      --muted: #6f655d;
-      --line: #e3d9c8;
-      --bg: #f7f2ea;
-      --card: #ffffff;
-      --err: #b3261e;
+      --primary: #047857;          /* ปุ่มหลัก / ลิงก์ (5.5:1 บนพื้นขาว) */
+      --primary-hover: #065f46;
+      --primary-strong: #064e3b;
+      --primary-soft: #ecfdf5;     /* พื้นอ่อนสำหรับปุ่มรอง / โซนอัปโหลด */
+      --primary-tint: #d1fae5;
+      --on-primary: #ffffff;
+      --bg: #f3f8f5;
+      --surface: #ffffff;
+      --text: #0f2a1d;
+      --text-muted: #4a5d52;       /* 7:1 บนพื้นขาว */
+      --border: #d5e3db;
+      --border-strong: #a7c4b4;
+      --danger: #b42318;
+      --danger-soft: #fef3f2;
+      --ring: 0 0 0 3px rgba(4, 120, 87, .35);
+      --radius-sm: 10px;
+      --radius: 14px;
+      --radius-lg: 20px;
+      --shadow: 0 1px 2px rgba(6, 78, 59, .06), 0 4px 16px rgba(6, 78, 59, .06);
+      --ease: cubic-bezier(.2, .8, .2, 1);
+      --dur: 160ms;
     }
     * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
     body {
-      margin: 0; background: var(--bg); color: var(--ink);
-      font-family: 'Sarabun', system-ui, sans-serif; font-size: 16px; line-height: 1.6;
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: 'Sarabun', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-size: 16px; line-height: 1.6;
     }
-    .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
-    header.card { border-top: 8px solid var(--maroon); text-align: center; padding: 28px 20px; }
-    header .tag {
-      display: inline-block; background: var(--gold-soft); color: var(--maroon);
-      border: 1px solid var(--gold); border-radius: 999px; padding: 2px 14px; font-weight: 600; font-size: 14px;
+    button, input, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; touch-action: manipulation; }
+    .icon { width: 20px; height: 20px; flex: none; }
+    .skip {
+      position: absolute; left: 16px; top: -48px; z-index: 10; padding: 10px 16px;
+      background: var(--surface); color: var(--primary-strong); border-radius: var(--radius-sm);
+      font-weight: 600; box-shadow: var(--shadow); transition: top var(--dur) var(--ease);
     }
-    header h1 { font-size: 22px; margin: 12px 0 4px; color: var(--maroon); line-height: 1.45; }
-    header p { margin: 4px 0 0; color: var(--muted); }
+    .skip:focus { top: 12px; }
+
+    /* ---------- ส่วนหัว ---------- */
+    .hero {
+      background:
+        radial-gradient(1200px 300px at 50% -80px, rgba(255,255,255,.14), transparent 70%),
+        linear-gradient(160deg, #047857 0%, #065f46 55%, #064e3b 100%);
+      color: var(--on-primary); text-align: center;
+      padding: 40px 16px 88px;
+    }
+    .hero .emblem {
+      width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28);
+    }
+    .hero .emblem svg { width: 34px; height: 34px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3);
+      border-radius: 999px; padding: 4px 14px; font-size: 14px; font-weight: 600;
+    }
+    .hero h1 {
+      font-family: 'Prompt', 'Sarabun', sans-serif; font-weight: 600;
+      font-size: clamp(22px, 5.2vw, 30px); line-height: 1.45; margin: 14px auto 8px;
+      max-width: 640px; text-wrap: balance;
+    }
+    .hero h1 .temple { display: block; font-weight: 500; font-size: .78em; opacity: .92; }
+    .hero p { margin: 0; color: rgba(255,255,255,.88); }
+
+    /* ---------- เนื้อหา ---------- */
+    .wrap { max-width: 720px; margin: -56px auto 0; padding: 0 16px 48px; }
     .card {
-      background: var(--card); border: 1px solid var(--line); border-radius: 12px;
-      padding: 20px; margin-bottom: 14px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px;
     }
-    label.q { display: block; font-weight: 600; margin-bottom: 8px; }
-    .num { color: var(--gold); margin-right: 6px; }
-    .req { color: var(--err); }
-    .opt { color: var(--muted); font-weight: 400; font-size: 14px; }
-    .hint { color: var(--muted); font-size: 14px; margin: -4px 0 8px; }
-    input[type=text], input[type=url], textarea {
-      width: 100%; padding: 10px 12px; font: inherit; color: inherit;
-      border: 1px solid var(--line); border-radius: 8px; background: #fff;
+    .section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .section-head .step {
+      width: 36px; height: 36px; flex: none; border-radius: 50%;
+      display: grid; place-items: center;
+      background: var(--primary-soft); color: var(--primary); border: 1px solid var(--primary-tint);
     }
-    input:focus, textarea:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
-    .invalid input, .invalid textarea { border-color: var(--err); }
-    .name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .name-row .idx { flex: none; width: 1.8em; text-align: right; color: var(--muted); font-size: 14px; }
+    .section-head h2 {
+      font-family: 'Prompt', 'Sarabun', sans-serif; font-weight: 600;
+      font-size: 19px; line-height: 1.4; margin: 0; color: var(--primary-strong);
+    }
+    .section-head p { margin: 0; font-size: 14px; color: var(--text-muted); }
+    .req-note { font-size: 14px; color: var(--text-muted); margin: 0 0 4px; }
+    .req { color: var(--danger); }
+
+    .field + .field { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--border); }
+    .field > label, .field > .label {
+      display: block; font-weight: 600; margin-bottom: 6px; color: var(--text);
+    }
+    .num {
+      display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 6px;
+      margin-right: 8px; border-radius: 999px; font-size: 13px; font-weight: 700;
+      background: var(--primary); color: var(--on-primary); vertical-align: 1px;
+    }
+    .opt { color: var(--text-muted); font-weight: 400; font-size: 14px; }
+    .hint { color: var(--text-muted); font-size: 14px; margin: -2px 0 10px; }
+
+    input[type=text], textarea {
+      width: 100%; min-height: 48px; padding: 11px 14px;
+      border: 1.5px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface);
+      transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+    }
+    input[type=text]::placeholder { color: #7b8c82; }
+    input[type=text]:hover { border-color: var(--primary); }
+    input[type=text]:focus-visible, textarea:focus-visible {
+      outline: none; border-color: var(--primary); box-shadow: var(--ring);
+    }
+    button:focus-visible, .drop:focus-visible, .skip:focus-visible {
+      outline: 3px solid var(--primary); outline-offset: 2px;
+    }
+
+    /* ข้อผิดพลาด: ข้อความ + ไอคอน (ไม่ใช้สีอย่างเดียว) */
+    .msg {
+      display: none; align-items: center; gap: 6px;
+      color: var(--danger); font-size: 14px; font-weight: 500; margin-top: 8px;
+    }
+    .msg::before {
+      content: ''; width: 16px; height: 16px; flex: none; background: currentColor;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-2h2v2Zm0-4h-2V7h2v6Z'/%3E%3C/svg%3E") center/contain no-repeat;
+              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-2h2v2Zm0-4h-2V7h2v6Z'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    .invalid .msg { display: flex; }
+    .invalid > input[type=text] { border-color: var(--danger); background: var(--danger-soft); }
+
+    /* รายชื่อ 1 ช่องต่อ 1 ชื่อ */
+    .name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .name-row .idx {
+      flex: none; width: 28px; text-align: right; color: var(--text-muted);
+      font-size: 14px; font-variant-numeric: tabular-nums;
+    }
     .name-row input { flex: 1; min-width: 0; }
-    .name-row .remove-name {
-      flex: none; border: 1px solid var(--line); background: #fff; color: var(--err);
-      border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px; cursor: pointer;
+    .remove-name {
+      flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+      min-width: 48px; min-height: 48px; padding: 0 12px;
+      border: 1.5px solid var(--border); background: var(--surface); color: var(--danger);
+      border-radius: var(--radius-sm); font-size: 14px; font-weight: 500;
+      transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
     }
-    .name-row .remove-name:hover { border-color: var(--err); background: #fdecea; }
-    .name-row .remove-name[hidden] { display: none; }
+    .remove-name:hover { border-color: var(--danger); background: var(--danger-soft); }
+    .remove-name .icon { width: 18px; height: 18px; }
+    .remove-name[hidden] { display: none; }
     .add-name {
-      border: 1px dashed var(--gold); background: var(--gold-soft); color: var(--maroon);
-      border-radius: 8px; padding: 8px 16px; font: inherit; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px;
+      margin-left: 36px; border: 1.5px dashed var(--primary); border-radius: var(--radius-sm);
+      background: var(--primary-soft); color: var(--primary-strong); font-weight: 600;
+      transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
     }
-    .add-name:hover { border-style: solid; }
-    .add-name:disabled { opacity: .5; cursor: not-allowed; }
-    .invalid .name-row input { border-color: var(--line); }
-    .invalid .name-row input.empty { border-color: var(--err); }
-    .msg { color: var(--err); font-size: 14px; margin-top: 6px; display: none; }
-    .invalid .msg { display: block; }
+    .add-name:hover:not(:disabled) { background: var(--primary-tint); border-style: solid; }
+    .add-name:disabled { opacity: .45; cursor: not-allowed; }
+    .invalid .name-row input.empty { border-color: var(--danger); background: var(--danger-soft); }
+
+    /* อัปโหลดไฟล์ */
     .drop {
-      border: 2px dashed var(--line); border-radius: 10px; padding: 18px; text-align: center;
-      color: var(--muted); cursor: pointer; transition: .15s;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      border: 2px dashed var(--border-strong); border-radius: var(--radius); padding: 24px 16px;
+      text-align: center; color: var(--text-muted); background: #fbfdfc;
+      transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
     }
-    .drop:hover, .drop.over { border-color: var(--gold); background: var(--gold-soft); }
-    .drop strong { color: var(--maroon); }
-    #fileList { list-style: none; padding: 0; margin: 10px 0 0; }
+    .drop:hover, .drop.over { border-color: var(--primary); background: var(--primary-soft); }
+    .drop .drop-icon {
+      width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--primary-soft); color: var(--primary); margin-bottom: 4px;
+    }
+    .drop strong { color: var(--primary-strong); font-weight: 600; }
+    .drop small { font-size: 13px; }
+    #fileList { list-style: none; padding: 0; margin: 12px 0 0; }
     #fileList li {
-      display: flex; justify-content: space-between; align-items: center; gap: 8px;
-      padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; margin-top: 6px; font-size: 14px;
+      display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 12px;
+      border: 1px solid var(--border); border-radius: var(--radius-sm); margin-top: 8px;
+      font-size: 14px; background: var(--surface);
     }
-    #fileList li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    #fileList button { border: 0; background: none; color: var(--err); cursor: pointer; font: inherit; flex: none; }
-    .actions { display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    #fileList li::before {
+      content: ''; width: 18px; height: 18px; flex: none; background: var(--primary);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 2v6h6'/%3E%3C/svg%3E") center/contain no-repeat;
+              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 2v6h6'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    #fileList li span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+    #fileList button {
+      flex: none; min-height: 40px; padding: 0 12px; border: 1px solid transparent;
+      border-radius: 8px; background: none; color: var(--danger); font-weight: 500;
+    }
+    #fileList button:hover { background: var(--danger-soft); border-color: #fecdca; }
+
+    /* ปุ่มส่ง + สถานะ */
+    .actions { display: flex; flex-direction: column; gap: 12px; }
+    .progress {
+      height: 8px; border-radius: 999px; background: var(--primary-soft); overflow: hidden;
+      border: 1px solid var(--primary-tint);
+    }
+    .progress .bar { height: 100%; width: 0; background: var(--primary); transition: width 300ms var(--ease); }
+    #status { font-size: 14px; color: var(--text-muted); min-height: 1.6em; margin: 0; }
+    #status.error { color: var(--danger); font-weight: 500; }
+    .action-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap-reverse; }
     button.primary {
-      background: var(--maroon); color: #fff; border: 0; border-radius: 8px;
-      padding: 12px 28px; font: inherit; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 52px; padding: 0 28px; border: 0; border-radius: var(--radius);
+      background: var(--primary); color: var(--on-primary); font-size: 17px; font-weight: 600;
+      box-shadow: 0 2px 8px rgba(4, 120, 87, .25);
+      transition: background-color var(--dur) var(--ease), transform var(--dur) var(--ease);
     }
-    button.primary:disabled { opacity: .6; cursor: wait; }
-    button.link { background: none; border: 0; color: var(--maroon); font: inherit; cursor: pointer; }
-    #status { font-size: 14px; color: var(--muted); }
-    #status.error { color: var(--err); }
-    .done { text-align: center; padding: 36px 20px; display: none; }
-    .done .icon { font-size: 48px; color: var(--gold); }
-    .done h2 { color: var(--maroon); margin: 8px 0; }
+    button.primary:hover:not(:disabled) { background: var(--primary-hover); }
+    button.primary:active:not(:disabled) { transform: translateY(1px); }
+    button.primary:disabled { opacity: .7; cursor: progress; }
+    .spinner {
+      width: 18px; height: 18px; border-radius: 50%; display: none;
+      border: 2.5px solid rgba(255,255,255,.45); border-top-color: #fff; animation: spin .8s linear infinite;
+    }
+    button.primary.loading .spinner { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    button.link {
+      min-height: 44px; padding: 0 8px; border: 0; background: none; color: var(--text-muted);
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+    button.link:hover { color: var(--danger); }
+
     .notice {
-      background: #fdecea; color: var(--err); border: 1px solid #f3c2bd; border-radius: 10px;
-      padding: 12px 16px; margin-bottom: 14px; font-size: 14px; display: none;
+      display: none; gap: 10px; align-items: flex-start;
+      background: var(--danger-soft); color: var(--danger); border: 1px solid #fecdca;
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; font-size: 14px;
     }
+    .done { text-align: center; padding: 40px 24px; display: none; }
+    .done .check {
+      width: 72px; height: 72px; margin: 0 auto 12px; border-radius: 50%;
+      display: grid; place-items: center; background: var(--primary-soft); color: var(--primary);
+      border: 1px solid var(--primary-tint);
+    }
+    .done .check svg { width: 38px; height: 38px; }
+    .done h2 { font-family: 'Prompt', 'Sarabun', sans-serif; color: var(--primary-strong); margin: 0 0 6px; font-size: 22px; }
+    .done p { color: var(--text-muted); margin: 0 0 22px; }
+    footer { text-align: center; color: var(--text-muted); font-size: 13px; padding: 8px 16px 32px; }
     .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+    @media (max-width: 480px) {
+      .card { padding: 20px 16px; border-radius: var(--radius); }
+      .add-name { margin-left: 0; }
+      .name-row .idx { width: 20px; }
+      .action-row button.primary { width: 100%; }
+      .action-row { justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 1ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+    }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="card">
-    <span class="tag">ประจำปี 2570</span>
-    <h1>แบบสำรวจการแสดงของนักเรียน<br>งานนมัสการปิดทองหลวงพ่อนิล<br>วัดปรีดาราม (ยายส้ม)</h1>
-    <p><span class="req">*</span> หมายถึงข้อที่ต้องกรอก</p>
-  </header>
+<a class="skip" href="#form">ข้ามไปยังแบบฟอร์ม</a>
 
-  <div class="notice" id="configNotice">ระบบยังไม่ได้ตั้งค่าปลายทางสำหรับบันทึกข้อมูล (SCRIPT_URL ในไฟล์ config.js) กรุณาติดต่อผู้ดูแลระบบ</div>
+<header class="hero">
+  <div class="emblem" aria-hidden="true">
+    <!-- ดอกบัว -->
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M24 38c-5-3-8-8-8-14 0-5 3-10 8-14 5 4 8 9 8 14 0 6-3 11-8 14Z"/>
+      <path d="M24 38c-7 0-14-4-16-12 4-1 8 0 11 2"/>
+      <path d="M24 38c7 0 14-4 16-12-4-1-8 0-11 2"/>
+      <path d="M12 41h24"/>
+    </svg>
+  </div>
+  <span class="chip">ประจำปี 2570</span>
+  <h1>แบบสำรวจการแสดงของนักเรียน งานนมัสการปิดทองหลวงพ่อนิล<span class="temple">วัดปรีดาราม (ยายส้ม)</span></h1>
+  <p>กรอกข้อมูลการแสดง 1 ชุดต่อการส่ง 1 ครั้ง</p>
+</header>
+
+<main class="wrap">
+  <div class="notice" id="configNotice" role="alert">ระบบยังไม่ได้ตั้งค่าปลายทางสำหรับบันทึกข้อมูล (SCRIPT_URL ในไฟล์ config.js) กรุณาติดต่อผู้ดูแลระบบ</div>
 
   <form id="form" novalidate>
     <div class="hp" aria-hidden="true">
       <label>เว้นช่องนี้ว่างไว้ <input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></label>
     </div>
-    <div class="card" data-field="school">
-      <label class="q" for="school"><span class="num">1.</span>ชื่อโรงเรียน <span class="req">*</span></label>
-      <input type="text" id="school" name="school" required maxlength="200" autocomplete="organization">
-      <div class="msg">กรุณากรอกชื่อโรงเรียน</div>
-    </div>
 
-    <div class="card" data-field="director">
-      <label class="q"><span class="num">2.</span>ชื่อผู้อำนวยการฝึกซ้อม <span class="req">*</span></label>
-      <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
-      <div class="names" id="directorList" data-label="ผู้อำนวยการฝึกซ้อม" data-max="20"></div>
-      <button type="button" class="add-name" data-list="directorList">＋ เพิ่มชื่อ</button>
-      <div class="msg">กรุณากรอกชื่อผู้อำนวยการฝึกซ้อมอย่างน้อย 1 ชื่อ</div>
-    </div>
-
-    <div class="card" data-field="level">
-      <label class="q" for="level"><span class="num">3.</span>ระดับชั้น <span class="req">*</span></label>
-      <input type="text" id="level" name="level" required maxlength="200">
-      <div class="msg">กรุณากรอกระดับชั้น</div>
-    </div>
-
-    <div class="card" data-field="showName">
-      <label class="q" for="showName"><span class="num">4.</span>ชื่อชุดการแสดง <span class="req">*</span></label>
-      <input type="text" id="showName" name="showName" required maxlength="300">
-      <div class="msg">กรุณากรอกชื่อชุดการแสดง</div>
-    </div>
-
-    <div class="card" data-field="performers">
-      <label class="q"><span class="num">5.</span>ชื่อนักแสดง <span class="req">*</span></label>
-      <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
-      <div class="names" id="performersList" data-label="นักแสดง" data-max="100"></div>
-      <button type="button" class="add-name" data-list="performersList">＋ เพิ่มชื่อ</button>
-      <div class="msg">กรุณากรอกชื่อนักแสดงอย่างน้อย 1 ชื่อ</div>
-    </div>
-
-    <div class="card" data-field="trainer">
-      <label class="q"><span class="num">6.</span>ชื่อครูผู้ฝึกซ้อม <span class="req">*</span></label>
-      <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
-      <div class="names" id="trainerList" data-label="ครูผู้ฝึกซ้อม" data-max="20"></div>
-      <button type="button" class="add-name" data-list="trainerList">＋ เพิ่มชื่อ</button>
-      <div class="msg">กรุณากรอกชื่อครูผู้ฝึกซ้อมอย่างน้อย 1 ชื่อ</div>
-    </div>
-
-    <div class="card" data-field="musicLink">
-      <label class="q" for="musicLink"><span class="num">7.</span>ลิงก์เพลง <span class="req">*</span></label>
-      <p class="hint">เช่น ลิงก์ YouTube หรือลิงก์ Google Drive </p>
-      <input type="text" id="musicLink" name="musicLink" required maxlength="1000">
-      <div class="msg">กรุณากรอกลิงก์เพลง</div>
-    </div>
-
-    <div class="card" data-field="files">
-      <label class="q"><span class="num">8.</span>อัปโหลดไฟล์ <span class="opt">(ไม่บังคับ)</span></label>
-      <p class="hint">เช่น ไฟล์เพลง ได้สูงสุด <span id="maxFilesText">5</span> ไฟล์ ไฟล์ละไม่เกิน <span id="maxFileMbText">100</span> MB</p>
-      <div class="drop" id="drop" tabindex="0" role="button">
-        <strong>คลิกเพื่อเลือกไฟล์</strong> หรือลากไฟล์มาวางที่นี่
+    <section class="card" aria-labelledby="secSchool">
+      <div class="section-head">
+        <div class="step" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg>
+        </div>
+        <div>
+          <h2 id="secSchool">ข้อมูลโรงเรียน</h2>
+          <p class="req-note"><span class="req">*</span> หมายถึงข้อที่ต้องกรอก</p>
+        </div>
       </div>
-      <input type="file" id="fileInput" multiple hidden>
-      <ul id="fileList"></ul>
-      <div class="msg" id="fileMsg"></div>
-    </div>
+
+      <div class="field" data-field="school">
+        <label for="school"><span class="num">1</span>ชื่อโรงเรียน <span class="req">*</span></label>
+        <input type="text" id="school" name="school" required maxlength="200" autocomplete="organization" aria-describedby="schoolMsg">
+        <div class="msg" id="schoolMsg">กรุณากรอกชื่อโรงเรียน</div>
+      </div>
+
+      <div class="field" data-field="director">
+        <span class="label" id="directorLabel"><span class="num">2</span>ชื่อผู้อำนวยการฝึกซ้อม <span class="req">*</span></span>
+        <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
+        <div class="names" id="directorList" role="group" aria-labelledby="directorLabel" data-label="ผู้อำนวยการฝึกซ้อม" data-max="20"></div>
+        <button type="button" class="add-name" data-list="directorList">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>เพิ่มชื่อ
+        </button>
+        <div class="msg">กรุณากรอกชื่อผู้อำนวยการฝึกซ้อมอย่างน้อย 1 ชื่อ</div>
+      </div>
+
+      <div class="field" data-field="level">
+        <label for="level"><span class="num">3</span>ระดับชั้น <span class="req">*</span></label>
+        <input type="text" id="level" name="level" required maxlength="200" placeholder="เช่น ป.4–ป.6" aria-describedby="levelMsg">
+        <div class="msg" id="levelMsg">กรุณากรอกระดับชั้น</div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="secShow">
+      <div class="section-head">
+        <div class="step" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
+        <h2 id="secShow">ข้อมูลการแสดง</h2>
+      </div>
+
+      <div class="field" data-field="showName">
+        <label for="showName"><span class="num">4</span>ชื่อชุดการแสดง <span class="req">*</span></label>
+        <input type="text" id="showName" name="showName" required maxlength="300" aria-describedby="showNameMsg">
+        <div class="msg" id="showNameMsg">กรุณากรอกชื่อชุดการแสดง</div>
+      </div>
+
+      <div class="field" data-field="performers">
+        <span class="label" id="performersLabel"><span class="num">5</span>ชื่อนักแสดง <span class="req">*</span></span>
+        <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
+        <div class="names" id="performersList" role="group" aria-labelledby="performersLabel" data-label="นักแสดง" data-max="100"></div>
+        <button type="button" class="add-name" data-list="performersList">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>เพิ่มชื่อ
+        </button>
+        <div class="msg">กรุณากรอกชื่อนักแสดงอย่างน้อย 1 ชื่อ</div>
+      </div>
+
+      <div class="field" data-field="trainer">
+        <span class="label" id="trainerLabel"><span class="num">6</span>ชื่อครูผู้ฝึกซ้อม <span class="req">*</span></span>
+        <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
+        <div class="names" id="trainerList" role="group" aria-labelledby="trainerLabel" data-label="ครูผู้ฝึกซ้อม" data-max="20"></div>
+        <button type="button" class="add-name" data-list="trainerList">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>เพิ่มชื่อ
+        </button>
+        <div class="msg">กรุณากรอกชื่อครูผู้ฝึกซ้อมอย่างน้อย 1 ชื่อ</div>
+      </div>
+
+      <div class="field" data-field="musicLink">
+        <label for="musicLink"><span class="num">7</span>ลิงก์เพลง <span class="req">*</span></label>
+        <p class="hint" id="musicLinkHint">เช่น ลิงก์ YouTube หรือลิงก์ Google Drive</p>
+        <input type="text" id="musicLink" name="musicLink" required maxlength="1000" inputmode="url" autocapitalize="off" spellcheck="false" aria-describedby="musicLinkHint musicLinkMsg">
+        <div class="msg" id="musicLinkMsg">กรุณากรอกลิงก์เพลง</div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="secFiles">
+      <div class="section-head">
+        <div class="step" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.1-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg>
+        </div>
+        <h2 id="secFiles">ไฟล์แนบ</h2>
+      </div>
+
+      <div class="field" data-field="files">
+        <span class="label"><span class="num">8</span>อัปโหลดไฟล์ <span class="opt">(ไม่บังคับ)</span></span>
+        <p class="hint">เช่น ไฟล์เพลง ได้สูงสุด <span id="maxFilesText">5</span> ไฟล์ ไฟล์ละไม่เกิน <span id="maxFileMbText">100</span> MB</p>
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="เลือกไฟล์ที่จะอัปโหลด">
+          <span class="drop-icon" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+          </span>
+          <strong>แตะหรือคลิกเพื่อเลือกไฟล์</strong>
+          <small>หรือลากไฟล์มาวางที่นี่</small>
+        </div>
+        <input type="file" id="fileInput" multiple hidden>
+        <ul id="fileList"></ul>
+        <div class="msg" id="fileMsg" role="alert"></div>
+      </div>
+    </section>
 
     <div class="card actions">
-      <button type="button" class="link" id="resetBtn">ล้างแบบฟอร์ม</button>
-      <span id="status"></span>
-      <button type="submit" class="primary" id="submitBtn">ส่งแบบสำรวจ</button>
+      <div class="progress" id="progress" hidden><div class="bar" id="progressBar"></div></div>
+      <p id="status" role="status" aria-live="polite"></p>
+      <div class="action-row">
+        <button type="button" class="link" id="resetBtn">ล้างแบบฟอร์ม</button>
+        <button type="submit" class="primary" id="submitBtn"><span class="spinner" aria-hidden="true"></span><span class="label-text">ส่งแบบสำรวจ</span></button>
+      </div>
     </div>
   </form>
 
-  <div class="card done" id="done">
-    <div class="icon">✓</div>
+  <div class="card done" id="done" tabindex="-1">
+    <div class="check" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
     <h2>ส่งข้อมูลเรียบร้อยแล้ว</h2>
     <p>ขอบคุณที่ร่วมส่งการแสดงในงานนมัสการปิดทองหลวงพ่อนิล ประจำปี 2570</p>
     <button class="primary" id="againBtn">ส่งการแสดงชุดอื่นเพิ่ม</button>
   </div>
-</div>
+</main>
+
+<footer>งานนมัสการปิดทองหลวงพ่อนิล · วัดปรีดาราม (ยายส้ม) · 2570</footer>
 
 <script>
   const CFG = window.SURVEY_CONFIG || {};
@@ -227,7 +446,7 @@
   }
   function showFileError(msg) {
     fileMsg.textContent = msg;
-    fileMsg.closest('.card').classList.toggle('invalid', !!msg);
+    fileMsg.closest('[data-field]').classList.toggle('invalid', !!msg);
   }
   function renderFiles() {
     fileList.innerHTML = '';
@@ -237,6 +456,7 @@
       name.textContent = f.name + ' (' + (f.size / 1048576).toFixed(2) + ' MB)';
       const rm = document.createElement('button');
       rm.type = 'button'; rm.textContent = 'ลบ';
+      rm.setAttribute('aria-label', 'ลบไฟล์ ' + f.name);
       rm.onclick = () => { files.splice(i, 1); showFileError(''); renderFiles(); };
       li.append(name, rm);
       fileList.append(li);
@@ -293,7 +513,9 @@
     rows.forEach((row, i) => {
       row.querySelector('.idx').textContent = (i + 1) + '.';
       row.querySelector('input').setAttribute('aria-label', list.dataset.label + ' คนที่ ' + (i + 1));
-      row.querySelector('.remove-name').hidden = rows.length === 1;
+      const rmBtn = row.querySelector('.remove-name');
+      rmBtn.hidden = rows.length === 1;
+      rmBtn.setAttribute('aria-label', 'ลบชื่อ' + list.dataset.label + ' คนที่ ' + (i + 1));
     });
     const addBtn = form.querySelector('.add-name[data-list="' + list.id + '"]');
     addBtn.disabled = rows.length >= Number(list.dataset.max);
@@ -312,7 +534,8 @@
       if (e.key === 'Enter') { e.preventDefault(); if (input.value.trim()) addNameRow(list, true); }
     });
     const rm = document.createElement('button');
-    rm.type = 'button'; rm.className = 'remove-name'; rm.textContent = 'ลบชื่อ';
+    rm.type = 'button'; rm.className = 'remove-name';
+    rm.innerHTML = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg><span>ลบชื่อ</span>';
     rm.onclick = () => {
       const next = row.nextElementSibling || row.previousElementSibling;
       row.remove(); renumber(list);
@@ -351,6 +574,7 @@
       const card = form.querySelector('[data-field="' + k + '"]');
       const ok = checks[k]();
       card.classList.toggle('invalid', !ok);
+      card.querySelectorAll(':scope > input').forEach(i => i.setAttribute('aria-invalid', String(!ok)));
       card.querySelectorAll('.name-row input').forEach(i => i.classList.toggle('empty', !ok && !i.value.trim()));
       if (!ok && !firstBad) firstBad = card;
     }
@@ -362,8 +586,11 @@
     return !firstBad;
   }
   form.addEventListener('input', e => {
-    const card = e.target.closest('.card');
-    if (card && card.dataset.field !== 'files') card.classList.remove('invalid');
+    const card = e.target.closest('[data-field]');
+    if (card && card.dataset.field !== 'files' && card.classList.contains('invalid')) {
+      card.classList.remove('invalid');
+      card.querySelectorAll('[aria-invalid]').forEach(i => i.removeAttribute('aria-invalid'));
+    }
   });
 
   // ---------- submit ----------
@@ -373,7 +600,7 @@
     if (!validate()) return;
     if (!SCRIPT_URL) { fail('ระบบยังไม่ได้ตั้งค่า SCRIPT_URL'); return; }
 
-    submitBtn.disabled = true;
+    setBusy(true);
     try {
       const uploadIds = [];
       const totalBytes = files.reduce((s, f) => s + f.size, 0);
@@ -383,12 +610,14 @@
         const show = sent => {
           const pct = Math.floor((doneBytes + sent) / totalBytes * 100);
           statusEl.textContent = 'กำลังอัปโหลดไฟล์ ' + (i + 1) + '/' + files.length + ' … ' + pct + '%';
+          setProgress(pct);
         };
         show(0);
         uploadIds.push(await uploadFile(f, form.school.value.trim(), show));
         doneBytes += f.size;
       }
       statusEl.textContent = 'กำลังบันทึกข้อมูล…';
+      if (files.length) setProgress(100);
       await api({
         action: 'submit',
         school: form.school.value.trim(),
@@ -401,16 +630,28 @@
         website: form.website.value,
         uploadIds
       });
+      setBusy(false);
       form.style.display = 'none';
-      document.getElementById('done').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const done = document.getElementById('done');
+      done.style.display = 'block';
+      done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      done.focus({ preventScroll: true });
     } catch (err) {
       fail(err.message === 'Failed to fetch' ? 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่' : err.message);
     }
   });
   window.addEventListener('beforeunload', e => { if (submitBtn.disabled) { e.preventDefault(); e.returnValue = ''; } });
+  const progress = document.getElementById('progress');
+  const progressBar = document.getElementById('progressBar');
+  function setProgress(pct) { progress.hidden = false; progressBar.style.width = pct + '%'; }
+  function setBusy(busy) {
+    submitBtn.disabled = busy;
+    submitBtn.classList.toggle('loading', busy);
+    submitBtn.querySelector('.label-text').textContent = busy ? 'กำลังส่ง…' : 'ส่งแบบสำรวจ';
+    if (!busy) { progress.hidden = true; progressBar.style.width = '0'; }
+  }
   function fail(msg) {
-    submitBtn.disabled = false;
+    setBusy(false);
     statusEl.className = 'error';
     statusEl.textContent = 'ส่งไม่สำเร็จ: ' + msg;
   }
@@ -419,7 +660,8 @@
     form.reset(); files = []; renderFiles(); showFileError('');
     initNameLists();
     form.querySelectorAll('.invalid').forEach(c => c.classList.remove('invalid'));
-    statusEl.textContent = ''; submitBtn.disabled = false;
+    form.querySelectorAll('[aria-invalid]').forEach(i => i.removeAttribute('aria-invalid'));
+    statusEl.className = ''; statusEl.textContent = ''; setBusy(false);
   }
   document.getElementById('resetBtn').onclick = () => { if (confirm('ต้องการล้างข้อมูลที่กรอกทั้งหมดใช่หรือไม่?')) resetForm(); };
   document.getElementById('againBtn').onclick = () => {
