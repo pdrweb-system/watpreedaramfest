@@ -29,10 +29,15 @@ const CONFIG = {
   CHUNK_MB: 8
 };
 
+// หัวคอลัมน์ที่เคยใช้ชื่ออื่น: ชีตเดิมจะถูกเปลี่ยนชื่อหัวคอลัมน์ให้อัตโนมัติ (ข้อมูลเดิมอยู่คอลัมน์เดิม)
+const RENAMED_HEADERS = {
+  'ชื่อผู้อำนวยการโรงเรียน': 'ชื่อผู้อำนวยการฝึกซ้อม'
+};
+
 const HEADERS = [
   'วันเวลาที่ส่ง',
   'ชื่อโรงเรียน',
-  'ชื่อผู้อำนวยการโรงเรียน',
+  'ชื่อผู้อำนวยการฝึกซ้อม',
   'ระดับชั้น',
   'ชื่อชุดการแสดง',
   'ชื่อนักแสดง',
@@ -93,7 +98,7 @@ function submitForm(form) {
     const values = {
       'วันเวลาที่ส่ง': new Date(),
       'ชื่อโรงเรียน': safe_(data.school),
-      'ชื่อผู้อำนวยการโรงเรียน': safe_(data.director),
+      'ชื่อผู้อำนวยการฝึกซ้อม': safe_(data.director),
       'ระดับชั้น': safe_(data.level),
       'ชื่อชุดการแสดง': safe_(data.showName),
       'ชื่อนักแสดง': safe_(data.performers),
@@ -219,7 +224,7 @@ function validate_(form) {
     musicLink: clean(form.musicLink)
   };
   const labels = {
-    school: 'ชื่อโรงเรียน', director: 'ชื่อผู้อำนวยการโรงเรียน', level: 'ระดับชั้น',
+    school: 'ชื่อโรงเรียน', director: 'ชื่อผู้อำนวยการฝึกซ้อม', level: 'ระดับชั้น',
     showName: 'ชื่อชุดการแสดง', performers: 'ชื่อนักแสดง', trainer: 'ชื่อครูผู้ฝึกซ้อม', musicLink: 'ลิงก์เพลง'
   };
   Object.keys(labels).forEach(function (k) {
@@ -257,6 +262,12 @@ function getSheet_() {
 
 /** เพิ่มคอลัมน์ที่ยังไม่มีในชีตเดิม (เช่น 'ชื่อนักแสดง') โดยแทรกไว้ต่อจากคอลัมน์ก่อนหน้าใน HEADERS */
 function ensureHeaders_(sheet) {
+  const first = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  first.forEach(function (h, i) {
+    if (RENAMED_HEADERS[h] && first.indexOf(RENAMED_HEADERS[h]) === -1) {
+      sheet.getRange(1, i + 1).setValue(RENAMED_HEADERS[h]);
+    }
+  });
   for (let i = 0; i < HEADERS.length; i++) {
     const header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     if (header.indexOf(HEADERS[i]) !== -1) continue;

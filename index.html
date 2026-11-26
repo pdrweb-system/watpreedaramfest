@@ -120,9 +120,11 @@
     </div>
 
     <div class="card" data-field="director">
-      <label class="q" for="director"><span class="num">2.</span>ชื่อผู้อำนวยการโรงเรียน <span class="req">*</span></label>
-      <input type="text" id="director" name="director" required maxlength="200">
-      <div class="msg">กรุณากรอกชื่อผู้อำนวยการโรงเรียน</div>
+      <label class="q"><span class="num">2.</span>ชื่อผู้อำนวยการฝึกซ้อม <span class="req">*</span></label>
+      <p class="hint">กรอก 1 ช่องต่อ 1 ชื่อ กด "เพิ่มชื่อ" เพื่อเพิ่มช่อง</p>
+      <div class="names" id="directorList" data-label="ผู้อำนวยการฝึกซ้อม" data-max="20"></div>
+      <button type="button" class="add-name" data-list="directorList">＋ เพิ่มชื่อ</button>
+      <div class="msg">กรุณากรอกชื่อผู้อำนวยการฝึกซ้อมอย่างน้อย 1 ชื่อ</div>
     </div>
 
     <div class="card" data-field="level">
@@ -338,7 +340,7 @@
     let firstBad = null;
     const checks = {
       school: () => form.school.value.trim() !== '',
-      director: () => form.director.value.trim() !== '',
+      director: () => getNames('directorList').length > 0,
       level: () => form.level.value.trim() !== '',
       showName: () => form.showName.value.trim() !== '',
       performers: () => getNames('performersList').length > 0,
@@ -390,7 +392,7 @@
       await api({
         action: 'submit',
         school: form.school.value.trim(),
-        director: form.director.value.trim(),
+        director: getNames('directorList').join('\n'),
         level: form.level.value.trim(),
         showName: form.showName.value.trim(),
         performers: getNames('performersList').join('\n'),
