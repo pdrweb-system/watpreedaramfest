@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แบบสำรวจการแสดงของนักเรียน งานปิดทองหลวงพ่อนิล 2570</title>
+  <meta name="description" content="แบบสำรวจการแสดงของนักเรียน งานนมัสการปิดทองหลวงพ่อนิล วัดปรีดาราม (มณีศิริวรรณ) ประจำปี 2570">
+  <script src="config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --maroon: #7a1f1f;
+      --gold: #c9a227;
+      --gold-soft: #fbf5e3;
+      --ink: #2b2420;
+      --muted: #6f655d;
+      --line: #e3d9c8;
+      --bg: #f7f2ea;
+      --card: #ffffff;
+      --err: #b3261e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: 'Sarabun', system-ui, sans-serif; font-size: 16px; line-height: 1.6;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+    header.card { border-top: 8px solid var(--maroon); text-align: center; padding: 28px 20px; }
+    header .tag {
+      display: inline-block; background: var(--gold-soft); color: var(--maroon);
+      border: 1px solid var(--gold); border-radius: 999px; padding: 2px 14px; font-weight: 600; font-size: 14px;
+    }
+    header h1 { font-size: 22px; margin: 12px 0 4px; color: var(--maroon); line-height: 1.45; }
+    header p { margin: 4px 0 0; color: var(--muted); }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+      padding: 20px; margin-bottom: 14px;
+    }
+    label.q { display: block; font-weight: 600; margin-bottom: 8px; }
+    .num { color: var(--gold); margin-right: 6px; }
+    .req { color: var(--err); }
+    .opt { color: var(--muted); font-weight: 400; font-size: 14px; }
+    .hint { color: var(--muted); font-size: 14px; margin: -4px 0 8px; }
+    input[type=text], input[type=url], select {
+      width: 100%; padding: 10px 12px; font: inherit; color: inherit;
+      border: 1px solid var(--line); border-radius: 8px; background: #fff;
+    }
+    input:focus, select:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
+    .invalid input, .invalid select { border-color: var(--err); }
+    .msg { color: var(--err); font-size: 14px; margin-top: 6px; display: none; }
+    .invalid .msg { display: block; }
+    #otherLevel { margin-top: 8px; display: none; }
+    .drop {
+      border: 2px dashed var(--line); border-radius: 10px; padding: 18px; text-align: center;
+      color: var(--muted); cursor: pointer; transition: .15s;
+    }
+    .drop:hover, .drop.over { border-color: var(--gold); background: var(--gold-soft); }
+    .drop strong { color: var(--maroon); }
+    #fileList { list-style: none; padding: 0; margin: 10px 0 0; }
+    #fileList li {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; margin-top: 6px; font-size: 14px;
+    }
+    #fileList li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #fileList button { border: 0; background: none; color: var(--err); cursor: pointer; font: inherit; flex: none; }
+    .actions { display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    button.primary {
+      background: var(--maroon); color: #fff; border: 0; border-radius: 8px;
+      padding: 12px 28px; font: inherit; font-weight: 600; cursor: pointer;
+    }
+    button.primary:disabled { opacity: .6; cursor: wait; }
+    button.link { background: none; border: 0; color: var(--maroon); font: inherit; cursor: pointer; }
+    #status { font-size: 14px; color: var(--muted); }
+    #status.error { color: var(--err); }
+    .done { text-align: center; padding: 36px 20px; display: none; }
+    .done .icon { font-size: 48px; color: var(--gold); }
+    .done h2 { color: var(--maroon); margin: 8px 0; }
+    .notice {
+      background: #fdecea; color: var(--err); border: 1px solid #f3c2bd; border-radius: 10px;
+      padding: 12px 16px; margin-bottom: 14px; font-size: 14px; display: none;
+    }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="card">
+    <span class="tag">ประจำปี 2570</span>
+    <h1>แบบสำรวจการแสดงของนักเรียน<br>งานนมัสการปิดทองหลวงพ่อนิล<br>วัดปรีดาราม (มณีศิริวรรณ)</h1>
+    <p><span class="req">*</span> หมายถึงข้อที่ต้องกรอก</p>
+  </header>
+
+  <div class="notice" id="configNotice">ระบบยังไม่ได้ตั้งค่าปลายทางสำหรับบันทึกข้อมูล (SCRIPT_URL ในไฟล์ config.js) กรุณาติดต่อผู้ดูแลระบบ</div>
+
+  <form id="form" novalidate>
+    <div class="hp" aria-hidden="true">
+      <label>เว้นช่องนี้ว่างไว้ <input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+    <div class="card" data-field="school">
+      <label class="q" for="school"><span class="num">1.</span>ชื่อโรงเรียน <span class="req">*</span></label>
+      <input type="text" id="school" name="school" required maxlength="200" autocomplete="organization">
+      <div class="msg">กรุณากรอกชื่อโรงเรียน</div>
+    </div>
+
+    <div class="card" data-field="director">
+      <label class="q" for="director"><span class="num">2.</span>ชื่อผู้อำนวยการโรงเรียน <span class="req">*</span></label>
+      <input type="text" id="director" name="director" required maxlength="200">
+      <div class="msg">กรุณากรอกชื่อผู้อำนวยการโรงเรียน</div>
+    </div>
+
+    <div class="card" data-field="level">
+      <label class="q" for="level"><span class="num">3.</span>ระดับชั้น <span class="req">*</span></label>
+      <select id="level" name="level" required>
+        <option value="">— เลือกระดับชั้น —</option>
+        <option>อนุบาล</option>
+        <option>ประถมศึกษาตอนต้น (ป.1–ป.3)</option>
+        <option>ประถมศึกษาตอนปลาย (ป.4–ป.6)</option>
+        <option>มัธยมศึกษาตอนต้น (ม.1–ม.3)</option>
+        <option>มัธยมศึกษาตอนปลาย (ม.4–ม.6)</option>
+        <option>คละระดับชั้น</option>
+        <option value="__other">อื่น ๆ (โปรดระบุ)</option>
+      </select>
+      <input type="text" id="otherLevel" placeholder="ระบุระดับชั้น" maxlength="200">
+      <div class="msg">กรุณาเลือกหรือระบุระดับชั้น</div>
+    </div>
+
+    <div class="card" data-field="showName">
+      <label class="q" for="showName"><span class="num">4.</span>ชื่อชุดการแสดง <span class="req">*</span></label>
+      <input type="text" id="showName" name="showName" required maxlength="300">
+      <div class="msg">กรุณากรอกชื่อชุดการแสดง</div>
+    </div>
+
+    <div class="card" data-field="trainer">
+      <label class="q" for="trainer"><span class="num">5.</span>ชื่อครูผู้ฝึกซ้อม <span class="req">*</span></label>
+      <p class="hint">หากมีหลายท่าน ให้คั่นด้วยเครื่องหมายจุลภาค ( , )</p>
+      <input type="text" id="trainer" name="trainer" required maxlength="500">
+      <div class="msg">กรุณากรอกชื่อครูผู้ฝึกซ้อม</div>
+    </div>
+
+    <div class="card" data-field="musicLink">
+      <label class="q" for="musicLink"><span class="num">6.</span>ลิงก์เพลง <span class="req">*</span></label>
+      <p class="hint">เช่น ลิงก์ YouTube หรือลิงก์ Google Drive (ตั้งค่าให้ทุกคนที่มีลิงก์เปิดได้)</p>
+      <input type="url" id="musicLink" name="musicLink" required placeholder="https://" maxlength="1000">
+      <div class="msg">กรุณาใส่ลิงก์ที่ขึ้นต้นด้วย http:// หรือ https://</div>
+    </div>
+
+    <div class="card" data-field="files">
+      <label class="q"><span class="num">7.</span>อัปโหลดไฟล์ <span class="opt">(ไม่บังคับ)</span></label>
+      <p class="hint">เช่น ไฟล์เพลง ภาพชุดการแสดง หรือเอกสารประกอบ ได้สูงสุด 5 ไฟล์ ไฟล์ละไม่เกิน 10 MB (รวมไม่เกิน 25 MB)</p>
+      <div class="drop" id="drop" tabindex="0" role="button">
+        <strong>คลิกเพื่อเลือกไฟล์</strong> หรือลากไฟล์มาวางที่นี่
+      </div>
+      <input type="file" id="fileInput" multiple hidden>
+      <ul id="fileList"></ul>
+      <div class="msg" id="fileMsg"></div>
+    </div>
+
+    <div class="card actions">
+      <button type="button" class="link" id="resetBtn">ล้างแบบฟอร์ม</button>
+      <span id="status"></span>
+      <button type="submit" class="primary" id="submitBtn">ส่งแบบสำรวจ</button>
+    </div>
+  </form>
+
+  <div class="card done" id="done">
+    <div class="icon">✓</div>
+    <h2>ส่งข้อมูลเรียบร้อยแล้ว</h2>
+    <p>ขอบคุณที่ร่วมส่งการแสดงในงานนมัสการปิดทองหลวงพ่อนิล ประจำปี 2570</p>
+    <button class="primary" id="againBtn">ส่งการแสดงชุดอื่นเพิ่ม</button>
+  </div>
+</div>
+
+<script>
+  const CFG = window.SURVEY_CONFIG || {};
+  const SCRIPT_URL = (CFG.SCRIPT_URL || '').trim();
+  const MAX_FILES = CFG.MAX_FILES || 5, MAX_FILE_MB = CFG.MAX_FILE_MB || 10, MAX_TOTAL_MB = CFG.MAX_TOTAL_MB || 25;
+  if (!SCRIPT_URL) document.getElementById('configNotice').style.display = 'block';
+  const form = document.getElementById('form');
+  const levelSel = document.getElementById('level');
+  const otherLevel = document.getElementById('otherLevel');
+  const drop = document.getElementById('drop');
+  const fileInput = document.getElementById('fileInput');
+  const fileList = document.getElementById('fileList');
+  const fileMsg = document.getElementById('fileMsg');
+  const statusEl = document.getElementById('status');
+  const submitBtn = document.getElementById('submitBtn');
+  let files = [];
+
+  levelSel.addEventListener('change', () => {
+    const other = levelSel.value === '__other';
+    otherLevel.style.display = other ? 'block' : 'none';
+    if (other) otherLevel.focus();
+  });
+
+  // ---------- files ----------
+  drop.addEventListener('click', () => fileInput.click());
+  drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+  fileInput.addEventListener('change', () => { addFiles(fileInput.files); fileInput.value = ''; });
+
+  function addFiles(list) {
+    let err = '';
+    for (const f of list) {
+      if (files.length >= MAX_FILES) { err = 'แนบไฟล์ได้ไม่เกิน ' + MAX_FILES + ' ไฟล์'; break; }
+      if (f.size > MAX_FILE_MB * 1048576) { err = 'ไฟล์ "' + f.name + '" มีขนาดเกิน ' + MAX_FILE_MB + ' MB'; continue; }
+      const total = files.reduce((s, x) => s + x.size, 0) + f.size;
+      if (total > MAX_TOTAL_MB * 1048576) { err = 'ขนาดไฟล์รวมเกิน ' + MAX_TOTAL_MB + ' MB'; continue; }
+      files.push(f);
+    }
+    showFileError(err);
+    renderFiles();
+  }
+  function showFileError(msg) {
+    fileMsg.textContent = msg;
+    fileMsg.closest('.card').classList.toggle('invalid', !!msg);
+  }
+  function renderFiles() {
+    fileList.innerHTML = '';
+    files.forEach((f, i) => {
+      const li = document.createElement('li');
+      const name = document.createElement('span');
+      name.textContent = f.name + ' (' + (f.size / 1048576).toFixed(2) + ' MB)';
+      const rm = document.createElement('button');
+      rm.type = 'button'; rm.textContent = 'ลบ';
+      rm.onclick = () => { files.splice(i, 1); showFileError(''); renderFiles(); };
+      li.append(name, rm);
+      fileList.append(li);
+    });
+  }
+  function readFile(f) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve({ name: f.name, type: f.type, data: String(r.result).split(',')[1] || '' });
+      r.onerror = () => reject(new Error('อ่านไฟล์ "' + f.name + '" ไม่สำเร็จ'));
+      r.readAsDataURL(f);
+    });
+  }
+
+  // ---------- validation ----------
+  function getLevel() {
+    return levelSel.value === '__other' ? otherLevel.value.trim() : levelSel.value;
+  }
+  function validate() {
+    let firstBad = null;
+    const checks = {
+      school: () => form.school.value.trim() !== '',
+      director: () => form.director.value.trim() !== '',
+      level: () => getLevel() !== '',
+      showName: () => form.showName.value.trim() !== '',
+      trainer: () => form.trainer.value.trim() !== '',
+      musicLink: () => /^https?:\/\/\S+$/i.test(form.musicLink.value.trim())
+    };
+    for (const k in checks) {
+      const card = form.querySelector('[data-field="' + k + '"]');
+      const ok = checks[k]();
+      card.classList.toggle('invalid', !ok);
+      if (!ok && !firstBad) firstBad = card;
+    }
+    if (firstBad) {
+      firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const el = firstBad.querySelector('input, select');
+      if (el) el.focus({ preventScroll: true });
+    }
+    return !firstBad;
+  }
+  form.addEventListener('input', e => {
+    const card = e.target.closest('.card');
+    if (card && card.dataset.field !== 'files') card.classList.remove('invalid');
+  });
+
+  // ---------- submit ----------
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    statusEl.className = ''; statusEl.textContent = '';
+    if (!validate()) return;
+    if (!SCRIPT_URL) { fail('ระบบยังไม่ได้ตั้งค่า SCRIPT_URL'); return; }
+
+    submitBtn.disabled = true;
+    statusEl.textContent = files.length ? 'กำลังอัปโหลดไฟล์และบันทึกข้อมูล…' : 'กำลังบันทึกข้อมูล…';
+    try {
+      const payload = {
+        school: form.school.value.trim(),
+        director: form.director.value.trim(),
+        level: getLevel(),
+        showName: form.showName.value.trim(),
+        trainer: form.trainer.value.trim(),
+        musicLink: form.musicLink.value.trim(),
+        website: form.website.value,
+        files: await Promise.all(files.map(readFile))
+      };
+      // ส่งเป็น text/plain เพื่อไม่ให้เกิด CORS preflight กับ Google Apps Script
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload),
+        redirect: 'follow'
+      });
+      let result;
+      try { result = await res.json(); } catch (_) { throw new Error('เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง (HTTP ' + res.status + ')'); }
+      if (!result.ok) throw new Error(result.error || 'ไม่ทราบสาเหตุ');
+      form.style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      fail(err.message === 'Failed to fetch' ? 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่' : err.message);
+    }
+  });
+  function fail(msg) {
+    submitBtn.disabled = false;
+    statusEl.className = 'error';
+    statusEl.textContent = 'ส่งไม่สำเร็จ: ' + msg;
+  }
+
+  function resetForm() {
+    form.reset(); files = []; renderFiles(); showFileError('');
+    otherLevel.style.display = 'none';
+    form.querySelectorAll('.invalid').forEach(c => c.classList.remove('invalid'));
+    statusEl.textContent = ''; submitBtn.disabled = false;
+  }
+  document.getElementById('resetBtn').onclick = () => { if (confirm('ต้องการล้างข้อมูลที่กรอกทั้งหมดใช่หรือไม่?')) resetForm(); };
+  document.getElementById('againBtn').onclick = () => {
+    resetForm();
+    document.getElementById('done').style.display = 'none';
+    form.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+</script>
+</body>
+</html>
