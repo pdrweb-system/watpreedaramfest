@@ -42,15 +42,14 @@
     .req { color: var(--err); }
     .opt { color: var(--muted); font-weight: 400; font-size: 14px; }
     .hint { color: var(--muted); font-size: 14px; margin: -4px 0 8px; }
-    input[type=text], input[type=url], select {
+    input[type=text], input[type=url] {
       width: 100%; padding: 10px 12px; font: inherit; color: inherit;
       border: 1px solid var(--line); border-radius: 8px; background: #fff;
     }
-    input:focus, select:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
-    .invalid input, .invalid select { border-color: var(--err); }
+    input:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
+    .invalid input { border-color: var(--err); }
     .msg { color: var(--err); font-size: 14px; margin-top: 6px; display: none; }
     .invalid .msg { display: block; }
-    #otherLevel { margin-top: 8px; display: none; }
     .drop {
       border: 2px dashed var(--line); border-radius: 10px; padding: 18px; text-align: center;
       color: var(--muted); cursor: pointer; transition: .15s;
@@ -111,18 +110,8 @@
 
     <div class="card" data-field="level">
       <label class="q" for="level"><span class="num">3.</span>ระดับชั้น <span class="req">*</span></label>
-      <select id="level" name="level" required>
-        <option value="">— เลือกระดับชั้น —</option>
-        <option>อนุบาล</option>
-        <option>ประถมศึกษาตอนต้น (ป.1–ป.3)</option>
-        <option>ประถมศึกษาตอนปลาย (ป.4–ป.6)</option>
-        <option>มัธยมศึกษาตอนต้น (ม.1–ม.3)</option>
-        <option>มัธยมศึกษาตอนปลาย (ม.4–ม.6)</option>
-        <option>คละระดับชั้น</option>
-        <option value="__other">อื่น ๆ (โปรดระบุ)</option>
-      </select>
-      <input type="text" id="otherLevel" placeholder="ระบุระดับชั้น" maxlength="200">
-      <div class="msg">กรุณาเลือกหรือระบุระดับชั้น</div>
+      <input type="text" id="level" name="level" required maxlength="200">
+      <div class="msg">กรุณากรอกระดับชั้น</div>
     </div>
 
     <div class="card" data-field="showName">
@@ -177,8 +166,6 @@
   const MAX_FILES = CFG.MAX_FILES || 5, MAX_FILE_MB = CFG.MAX_FILE_MB || 10, MAX_TOTAL_MB = CFG.MAX_TOTAL_MB || 25;
   if (!SCRIPT_URL) document.getElementById('configNotice').style.display = 'block';
   const form = document.getElementById('form');
-  const levelSel = document.getElementById('level');
-  const otherLevel = document.getElementById('otherLevel');
   const drop = document.getElementById('drop');
   const fileInput = document.getElementById('fileInput');
   const fileList = document.getElementById('fileList');
@@ -186,12 +173,6 @@
   const statusEl = document.getElementById('status');
   const submitBtn = document.getElementById('submitBtn');
   let files = [];
-
-  levelSel.addEventListener('change', () => {
-    const other = levelSel.value === '__other';
-    otherLevel.style.display = other ? 'block' : 'none';
-    if (other) otherLevel.focus();
-  });
 
   // ---------- files ----------
   drop.addEventListener('click', () => fileInput.click());
@@ -240,15 +221,12 @@
   }
 
   // ---------- validation ----------
-  function getLevel() {
-    return levelSel.value === '__other' ? otherLevel.value.trim() : levelSel.value;
-  }
   function validate() {
     let firstBad = null;
     const checks = {
       school: () => form.school.value.trim() !== '',
       director: () => form.director.value.trim() !== '',
-      level: () => getLevel() !== '',
+      level: () => form.level.value.trim() !== '',
       showName: () => form.showName.value.trim() !== '',
       trainer: () => form.trainer.value.trim() !== '',
       musicLink: () => /^https?:\/\/\S+$/i.test(form.musicLink.value.trim())
@@ -261,7 +239,7 @@
     }
     if (firstBad) {
       firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      const el = firstBad.querySelector('input, select');
+      const el = firstBad.querySelector('input');
       if (el) el.focus({ preventScroll: true });
     }
     return !firstBad;
@@ -284,7 +262,7 @@
       const payload = {
         school: form.school.value.trim(),
         director: form.director.value.trim(),
-        level: getLevel(),
+        level: form.level.value.trim(),
         showName: form.showName.value.trim(),
         trainer: form.trainer.value.trim(),
         musicLink: form.musicLink.value.trim(),
@@ -316,7 +294,6 @@
 
   function resetForm() {
     form.reset(); files = []; renderFiles(); showFileError('');
-    otherLevel.style.display = 'none';
     form.querySelectorAll('.invalid').forEach(c => c.classList.remove('invalid'));
     statusEl.textContent = ''; submitBtn.disabled = false;
   }
